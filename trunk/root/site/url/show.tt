@@ -1,0 +1,13 @@
+[% SET url = context.url %]
+<h1>[% c.loc('URL Details') %]</h1>
+<a href="[% c.action_uri('Site::URL', 'edit', [ context.site.id, url.id ]) %]">[% c.loc('Edit Page') %]</a>
+<form>
+ <fieldset>
+  [% readonly_field({ label => c.loc('Path'), value => url.path }) %]
+  [% readonly_field({ label => c.loc('Page'), value => url.page.name }) %]
+  [% readonly_field({ label => c.loc('Created By'), value => url.user_id }) %]
+  [% readonly_binary_field({ label => c.loc('Active'), value => url.active }) %]
+  [% readonly_field({ label => c.loc('Date Created'), value => url.date_created.strftime('%A, %B %d %Y, %I:%m %p') }) %]
+  [% readonly_field({ label => c.loc('Date Last Modified'), value => url.date_last_modified.strftime('%A, %B %d %Y, %I:%m %p') }) %]
+ </fieldset>
+</form>

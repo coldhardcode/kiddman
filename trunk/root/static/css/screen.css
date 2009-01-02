@@ -1,0 +1,280 @@
+html {
+    background-color: #e9e9d7;
+    color: #353535;
+}
+#doc3 {
+    padding: 0;
+    margin: 0;
+}
+#hd {
+    background: #e5e5d4 url('/static/images/header_back.png');
+    height: 90px;
+}
+h1 {
+    border-bottom: 1px solid #ddd;
+    font-size: 2.61em;
+    font-weight: bold;
+    margin: 0 0 .75em 0;
+    padding: 0 0 3px 0;
+}
+h2 {
+    border-bottom: 1px solid #ddd;
+    font-size: 2em; /* 26px */
+    font-weight: bold;
+    margin: 0 0 7px 0;
+    padding: 2px 0 3px 0;
+}
+h3 {
+    border-bottom: 1px solid #ddd;
+    font-size: 1.615em; /* 21px */
+    font-weight: bold;
+    margin: 0 0 7px 0;
+    padding: 2px 0 3px 0;
+}
+h4 {
+    border-bottom: 1px solid #ddd;
+    font-size: 1.23em; /* 16px */
+    font-weight: bold;
+    margin: 0 0 7px 0;
+    padding: 2px 0 3px 0;
+}
+h5 {
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0 0 7px 0;
+    padding: 2px 0 3px 0;
+}
+a {
+    color: #3470a9;
+}
+p {
+    line-height: 1.307em;
+    padding: 0 0 1em 0;
+}
+ul {
+    padding: 0 0 13px 0;
+}
+ul li {
+    padding: 0 0 0 7px;
+    list-style-type: disc;
+    list-style-position: inside;
+}
+ol {
+    padding: 0 0 13px 0;
+}
+ol li {
+    padding: 0 0 0 7px;
+    list-style-type: decimal;
+    list-style-position: inside;
+}
+dl {
+    padding: 0 0 13px 0;
+}
+dl dt {
+    font-weight: bold;
+}
+dl dd {
+    padding: 0 0 1em 1em;
+}
+br {
+    clear: both;
+}
+table {
+    margin: 0 0 1em 0;
+}
+table thead th {
+    background-color: #ab0706;
+    color: #fff;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 7px 5px 5px 7px;
+}
+table tbody tr.head th {
+    background-color: #3470a9;
+    border-top: 1px solid #fff;
+    color: #f3f3f3;
+    font-size: 1.23em;
+    padding: 7px;
+}
+table tbody th {
+    background-color: #ddd;
+    border: 1px solid #fff;
+    font-weight: bold;
+    padding: 7px;
+}
+table tbody td {
+    padding: 7px;
+    border: 1px solid #fff;
+}
+table tbody tr.odd td {
+    background-color: #eee;
+}
+table tfoot td {
+    background-color: #ddd;
+    font-weight: bold;
+    padding: 7px;
+    text-align: right;
+}
+
+legend {
+    font-size: 1.615em;
+    font-weight: bold;
+    color: #353535;
+    margin: 0 0 7px 1em;
+    padding: 2px 5px 3px 5px;
+}
+fieldset {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    margin: 0 0 1em 0;
+    padding: 1em 0 1em 0;
+}
+fieldset h2 {
+    margin: 0 0 1em 2em;
+}
+fieldset label {
+    display: block;
+    text-align: bottom;
+}
+fieldset label.missing {
+	color: #b31d1c;
+}
+fieldset label.error {
+	color: #b31d1c;
+}
+fieldset label span {
+    float: left;
+}
+fieldset label em {
+    clear: left;
+    display: block;
+    float: left;
+    font-weight: bold;
+    padding: 0 7px 1em 5px;
+    text-align: right;
+    width: 15em;
+}
+fieldset input,
+fieldset select,
+fieldset textarea {
+    float: left;
+    margin: 0 0 1em 0;
+}
+fieldset.cwrap {
+    background-color: #fff;
+    float: left;
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+fieldset.cwrap label {
+    clear: both;
+    display: block;
+    float: none;
+    padding: 5px;
+}
+fieldset.cwrap input {
+    padding: 5px;
+}
+div.submit {
+    clear: left;
+    padding: 0 0 0 16em;
+}
+
+p.caption {
+    color: #919191;
+    font-size: 0.769em;
+}
+.error {
+    color: #ff0000;
+    font-weight: bold;
+}
+p.important {
+    font-weight: bold;
+}
+p small {
+    font-size: 0.769em;
+}
+p.subdued {
+    color: #919191;
+}
+.success {
+    color: #339900;
+    font-weight: bold;
+}
+
+#navigation {
+    background: #3470a9 url('/static/images/b-round-box-right.png') no-repeat right top;
+    color: #fff;
+    color: #f3f3f3;
+    padding: 5px;
+    margin: 0 0 1em 0;
+}
+#gmessage {
+    background: #339900 url('/static/images/g-round-box-right.png') no-repeat right top;
+    color: #fff;
+    margin: 0 0 0 1em;
+    overflow: hidden;
+    width: 50%;
+}
+#gmessage p {
+    background: url('/static/images/g-round-box-left.png') no-repeat left top;
+    padding: 7px 1em;
+    font-size: 1.23em;
+}
+#rmessage {
+    background: #b82c2b url('/static/images/round-box-right.png') no-repeat right top;
+    color: #fff;
+    margin: 0 0 0 1em;
+    overflow: hidden;
+    width: 50%;
+}
+#rmessage p {
+    background: url('/static/images/round-box-left.png') no-repeat left top;
+    padding: 7px 1em;
+    font-size: 1.23em;
+}
+#notice {
+    background: #ab0706 url('/static/images/round-box-right.png') no-repeat right top;
+    color: #fff;
+    color: #f3f3f3;
+    padding: 5px;
+    margin: 0 0 1em 0;
+}
+div.rounded h3 {
+    padding: 0 0 7px 0;
+}
+#focus {
+    background: #fff url('/static/images/w-round-box-left.png') no-repeat left top;
+    color: #353535;
+    padding: 5px 0 1em 1em;
+    margin: 0 0 1em 0;
+}
+div.pager {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 9px;
+    text-align: right;
+}
+div.pager p {
+    display: inline;
+    float: left;
+    font-size: 1.23em;
+    font-weight: bold;
+}
+div.pager span,
+div.pager a {
+    background: #fff;
+    border: 1px solid #ddd;
+    color: #919191;
+    padding: 5px;
+    margin: 3px 0 ;
+    text-decoration: none;
+}
+div.pager a {
+    color: #3470a9;
+}
+div.pager a:hover {
+    background-color: #3470a9;
+    color: #fff;
+}

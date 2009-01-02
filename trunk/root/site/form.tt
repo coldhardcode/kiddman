@@ -1,0 +1,7 @@
+<fieldset>
+ [% input_text({ label => c.loc('Name'), name => 'name', value => site.name }) %]
+ [% input_checkbox({ label => 'Active', name => 'active', value => site.active }) %]
+ <div class="submit">
+   <input type="submit" value="[% c.loc('Submit') %]">
+ </div>
+</fieldset>

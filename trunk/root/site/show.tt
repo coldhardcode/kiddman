@@ -1,0 +1,12 @@
+[% SET site = context.site %]
+<h1>[% c.loc('Site Details') %]</h1>
+<a href="[% c.action_uri('Site::URL', 'add', [ site.id ]) %]">[% c.loc('Add Page') %]</a>
+<form>
+ <fieldset>
+   [% readonly_field({ label => c.loc('ID'), value => site.id }) %]
+   [% readonly_field({ label => c.loc('Name'), value => site.name }) %]
+   [% readonly_field({ label => c.loc('Time To Live'), value => c.loc('[_1] seconds', site.ttl) }) %]
+   [% readonly_binary_field({ label => c.loc('Active'), value => site.active }) %]
+   [% readonly_field({ label => c.loc('Date Created'), value => site.date_created.strftime('%A, %B %d %Y, %I:%m %p') }) %]
+ </fieldset>
+</form>

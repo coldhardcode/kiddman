@@ -1,0 +1,1 @@
+<input type="text" name="options.[% attr.name %]" value="[% attr.value %]">

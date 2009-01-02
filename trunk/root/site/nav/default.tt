@@ -1,0 +1,58 @@
+[% IF notice %]
+<div id="notice">
+ <h3>[% c.loc('Notice') %]</h3>
+ <p>This is a notice.</p>
+</div>
+[% END %]
+<div id="navigation">
+ <h3>[% c.loc('Navigation') %]</h3>
+ <form>
+  [% UNLESS context.site %]
+   [% SET empty = 1 %]
+  [% END %]
+  [% input_select({ label => 'Site', value => context.site.id, array => sites, name => 'site', empty_option => empty, onchange => 'KIDDMAN.redirectToSiteId(this.selectedIndex)' }) %]
+ </form>
+[% page.head.stylesheets.push('treeview.css') %]
+
+[% MACRO make_branch(node) BLOCK;
+
+  IF node.isLeaf;
+    SET nodeValue = node.getNodeValue;
+    SET url = c.action_uri('Site::URL', 'show', [ nodeValue.site_id, nodeValue.id ]);
+    "<li><a href=\"$url\">$nodeValue.file</a></li>\n";
+  ELSE;
+    SET nodeValue = node.getNodeValue;
+    "<li><a href=\"#\">$nodeValue</a>\n";
+    "<ul>";
+    SET children = node.getAllChildren();
+    FOREACH child = children;
+      make_branch(child);
+	END;
+    "</ul>";
+    "</li>\n";
+  END;
+ END;
+%]
+
+[% SET tree = context.site.get_url_tree %]
+
+<div style="background-color: white">
+<div id="markup">
+[% SET nodes = tree.getAllChildren %]
+ <ul>
+[% FOREACH node = nodes %]
+  [% make_branch(node, 1) %]
+[% END %]
+ </ul>
+</div>
+</div>
+
+<script language="javascript">
+function makeTree() {
+	var tree1 = new YAHOO.widget.TreeView("markup");
+	tree1.render();
+}
+YAHOO.util.Event.onDOMReady(makeTree);
+</script>
+
+</div>

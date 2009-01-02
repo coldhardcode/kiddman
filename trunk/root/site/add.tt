@@ -1,0 +1,4 @@
+<h1>[% c.loc('Add A Site') %]</h1>
+<form method="POST" action="[% c.uri_for('/site/create') %]">
+[% PROCESS site/form.tt %]
+</form>

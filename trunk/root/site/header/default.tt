@@ -1,0 +1,3 @@
+<div id="hd">
+ <a href="[% c.uri_for('/') %]"><img src="/static/images/logo.png" alt="Site Manager"></a>
+</div>

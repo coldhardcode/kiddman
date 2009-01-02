@@ -1,0 +1,11 @@
+[% page.layout = 'bare' %]
+<h1>[% c.loc('Login') %]</h1>
+<form method="POST" action="[% c.uri_for('/auth/login') %]">
+ <fieldset>
+  [% input_text({ label => 'Username', name => 'username' }) %]
+  [% input_password({ label => 'Password', name => 'password' }) %]
+  <div class="submit">
+   <input type="submit" value="[% c.loc('Submit') %]">
+  </div>
+ </fieldset>
+</form>

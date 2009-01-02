@@ -1,0 +1,7 @@
+Run script/kiddman_server.pl to test the application.
+
+Notes:
+
+URLs are added as inactive.
+A revision is created, Activate op... marked as in progress
+User changes revisions status to "pending" to get it in queue

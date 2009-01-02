@@ -1,0 +1,25 @@
+<div id="bd">
+
+ <div id="yui-main">
+  <div class="yui-b content">
+   <div id="gmessage" [% UNLESS message.success %]style="display: none"[% END %]>
+    <p>[% IF message.success %][% message.success %][% END %]</p>
+   </div>
+   <div id="rmessage" [% UNLESS message.error %]style="display: none"[% END %]>
+    <p>[% IF message.error %][% message.error %][% END %]</p>
+   </div>
+   <div id="focus">
+    [% content %]
+   </div>
+  </div>
+ </div>
+
+ <div class="yui-b sidebar">
+   [% # Include the navigation
+   IF page.nav && page.nav != 'none';
+       PROCESS "site/nav/${page.nav}.tt";
+   END;
+   ~%]
+
+ </div>
+</div>

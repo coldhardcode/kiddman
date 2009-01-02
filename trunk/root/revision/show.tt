@@ -1,0 +1,12 @@
+[% SET revision = context.revision %]
+[% SET url = revision.url %]
+<h1>[% c.loc('Revision [_1]', revision.id) %]</h1>
+<form>
+ <fieldset>
+  [% readonly_field(label => 'Site', url => c.action_uri('Site', 'show', [ url.site_id ]), value => url.site.name) %]
+  [% readonly_field(label => 'URL', url => c.action_uri('Site::URL', 'show', [ url.site_id, url.id ]), value => url.path) %]
+  [% readonly_field(label => 'Operation', value => revision.op.name) %]
+  [% readonly_field(label => 'Status', value => revision.status.name) %]
+  [% readonly_binary_field(label => 'Active', value => revision.active) %]
+ </fieldset>
+</form>

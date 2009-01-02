@@ -1,0 +1,61 @@
+[%~
+  page.content_id = 'bd';
+  page.body.classes.push('yui-skin-sam');
+~%]
+[%~
+MACRO form_field_status(field) BLOCK;
+
+  IF c.form.missing(field);
+	status = 'missing';
+  END;
+
+  IF c.form.invalid(field);
+    status = 'invalid';
+  END;
+
+  status;
+
+END ~%]
+
+[%~
+MACRO input_select(info) BLOCK %]
+<label class="[% form_field_status(info.name) %]"><em>[% info.label %]: </em>
+ <select name="[% info.name %]"[% IF info.onchange %] onchange="[% info.onchange %]"[% END %]>
+  [% IF info.empty_option %]
+  <option value="">[% c.loc('Choose One') %]</option>
+  [% END %]
+  [%~
+  FOREACH item = info.array;
+   IF info.value_method;
+    SET this_value = item.${info.value_method};
+   ELSE;
+    SET this_value = item;
+   END; ~%]
+   <option value="[% this_value %]"[% IF this_value == info.value %] selected="selected"[% END %]>[% item %]</option>
+  [%~ END %]
+ </select>
+</label>
+[% END ~%]
+[%~ MACRO input_checkbox(info) BLOCK %]
+<label class="[% form_field_status(info.name) %]"><em>[% info.label %]: </em><input type="checkbox" name="[% info.name %]" [% IF info.value %]checked="checked"[% END %]></label>
+[% END ~%]
+[%~ MACRO input_text(info) BLOCK %]
+<label class="[% form_field_status(info.name) %]"><em>[% info.label %]: </em><input type="text" name="[% info.name %]" value="[% info.value %]"></label>
+[% END ~%]
+[%~ MACRO input_password(info) BLOCK %]
+<label class="[% form_field_status(info.name) %]"><em>[% info.label %]: </em><input type="password" name="[% info.name %]" value="[% info.value %]"></label>
+[% END ~%]
+[%~ MACRO readonly_field(info) BLOCK %]
+<label><em>[% info.label %]: </em>
+[% IF info.url %]
+ <span><a href="[% info.url %]">[% info.value %]</a></span>
+[% ELSE %]
+ <span>[% info.value %]</span>
+[% END %]
+</label>
+[% END %]
+[%~ MACRO readonly_binary_field(info) BLOCK %]
+<label><em>[% info.label %]: </em><span class="[% IF info.value %]success[% ELSE %]error[% END %]">[% IF info.value %]Yes[% ELSE %]No[% END %]</span></label>
+[% END ~%]
+
+
