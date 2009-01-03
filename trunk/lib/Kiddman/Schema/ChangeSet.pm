@@ -73,7 +73,6 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key('id');
 
-# __PACKAGE__->belongs_to('site' => 'Kiddman::Schema::Site', 'site_id');
 __PACKAGE__->has_many('revisions' => 'Kiddman::Schema::Revision', 'changeset_id');
 
 =item B<applied>
@@ -141,6 +140,12 @@ sub revision_count {
     return $self->revisions->count;
 }
 
+=item B<revisions>
+
+Returns the revisions in this ChangeSet
+
+=cut
+
 package Kiddman::ResultSet::ChangeSet;
 
 use base 'DBIx::Class::ResultSet';
@@ -177,5 +182,7 @@ Cory Watson <gphat@cpan.org>
 
 This library is free software, you can redistribute it and/or modify
 it under the same terms as Perl itself.
+
+=cut
 
 1;

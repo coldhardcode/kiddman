@@ -6,6 +6,20 @@ use base 'DBIx::Class';
 
 use YAML::XS;
 
+=head1 NAME
+
+Kiddman::Schema::Revision - Revision to a URL.
+
+=head1 SYNOPSIS
+
+    my $revision = $url->revise($op, $user, $options);
+
+=head1 DESCRIPTION
+
+Revisions are changes to URLs in Kiddman.
+
+=cut
+
 __PACKAGE__->load_components('TimeStamp', 'PK::Auto', 'InflateColumn::DateTime', 'Core');
 __PACKAGE__->table('revisions');
 __PACKAGE__->resultset_class('Kiddman::ResultSet::Authorization');
@@ -81,6 +95,14 @@ __PACKAGE__->belongs_to('changeset' => 'Kiddman::Schema::ChangeSet', 'changeset_
 __PACKAGE__->belongs_to('op' => 'Kiddman::Schema::Op', 'op_id');
 __PACKAGE__->belongs_to('status' => 'Kiddman::Schema::Status', 'status_id');
 __PACKAGE__->belongs_to('url' => 'Kiddman::Schema::URL', 'url_id');
+
+=head1 METHODS
+
+=over 4
+
+=item B<active>
+
+Active flag.
 
 =item B<apply>
 
@@ -168,13 +190,75 @@ sub apply {
     return 1;
 }
 
+=item B<changeset>
+
+Changeset this revision belongs to.
+
+=item B<changeset>
+
+ID of Changeset this revision belongs to.
+
+=item B<date_created>
+
+Date this revision was created.
+
+=item B<id>
+
+Id of this revision.
+
+=item B<op>
+
+Type of op this revision represents.
+
+=item B<op>
+
+ID of Type of op this revision represents.
+
+=item B<options>
+
+Options for this revision.  Stored as YAML but automatically inflated and
+deflated using L<YAML::XS>.
+
+=item B<status>
+
+Status of this revision.
+
+=item B<status_id>
+
+ID of status of this revision.
+
+=item B<url>
+
+URL this is a revision of.
+
+=item B<url_id>
+
+ID of URL this is a revision of.
+
+=item B<user_id>
+
+User id that created this Revision.
+
+=item B<version>
+
+Version of URL at the time this revision was created.  Protects "old"
+revisions from being applied to URLs.
+
+=back
+
+=cut
+
 package Kiddman::ResultSet::Authorization;
 
 use base 'DBIx::Class::ResultSet';
 
 =head1 RESULTSET METHODS
 
-=head2 active
+=over 4
+
+=item B<active>
+
+Finds active revisions.
 
 =cut
 
@@ -184,7 +268,9 @@ sub active {
     return $self->search({ active => 1 });
 }
 
-=head2 for_url
+=item B<for_url>
+
+Finds revisions for the given url object.
 
 =cut
 
@@ -194,7 +280,9 @@ sub for_url {
     return $self->search({ url_id => $url->id });
 }
 
-=head2 for_user
+=item B<for_user>
+
+Finds revisions for the given user_id.
 
 =cut
 
@@ -204,7 +292,9 @@ sub for_user {
     return $self->search({ user_id => $user });
 }
 
-=head2 op
+=item B<op>
+
+Finds revisions for the given op object.
 
 =cut
 
@@ -214,7 +304,9 @@ sub op {
     return $self->search({ op_id => $op->id });
 }
 
-=head2 pending {
+=item B<pending>
+
+Finds revisions that have not been applied.
     
 =cut
 
@@ -226,5 +318,22 @@ sub pending {
         { join => 'status' }
     );
 }
+
+=back
+
+=head1 SEE ALSO
+
+L<Kiddman::Controller::Page>
+
+=head1 AUTHOR
+
+Cory Watson <gphat@cpan.org>
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 1;

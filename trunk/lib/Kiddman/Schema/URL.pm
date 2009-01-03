@@ -9,6 +9,20 @@ use YAML::XS;
 
 use overload '""' => sub { $_[0]->file }, fallback => 1;
 
+=head1 NAME
+
+Kiddman::Schema::URL - A URL managed by Kiddman
+
+=head1 SYNOPSIS
+
+    XXX Add a synopsis
+
+=head1 DESCRIPTION
+
+URLs correspond to paths in the managed site.
+
+=cut
+
 __PACKAGE__->load_components('TimeStamp', 'PK::Auto', 'InflateColumn::DateTime', 'Core');
 __PACKAGE__->table('urls');
 __PACKAGE__->add_columns(
@@ -89,6 +103,26 @@ __PACKAGE__->add_unique_constraint(
 __PACKAGE__->belongs_to('site' => 'Kiddman::Schema::Site', 'site_id');
 __PACKAGE__->belongs_to('page' => 'Kiddman::Schema::Page', 'page_id');
 
+=head1 METHODS
+
+=over 4
+
+=item B<active>
+
+Active flag.
+
+=item B<date_created>
+
+Date this URL was created.
+
+=item B<date_last_modified>
+
+Date this URL was last modified.
+
+=item B<description>
+
+Description of this URL.
+
 =item B<file>
 
 Returns the final "element" in the path, which I am haphazardly referring to as the
@@ -101,6 +135,10 @@ sub file {
     my @parts = split('\/', $self->path);
     return $parts[$#parts];
 }
+
+=item B<id>
+
+Id of URL.
 
 =item B<is_leaf>
 
@@ -158,6 +196,23 @@ sub make_new {
     return $rev;
 }
 
+=item B<options>
+
+Options for this revision.  Stored as YAML but automatically inflated and
+deflated using L<YAML::XS>.
+
+=item B<page>
+
+Page this used at this URL.
+
+=item B<page_id>
+
+Id of Page this used at this URL.
+
+=item B<path>
+
+Path of this URL.
+
 =item B<revise($user, $options)>
 
 Creates a revision from this URL or modifies any extant unapplied revisions by this user
@@ -194,4 +249,44 @@ sub revise {
 
     return $revision;
 }
+
+=item B<site>
+
+Site this URL belongs to.
+
+=item B<site_id>
+
+Id of Site this URL belongs to.
+
+=item B<user>
+
+User that created this URL.
+
+=item B<user_id>
+
+Id of User that created this URL.
+
+=item B<version>
+
+Version of this URL.  The version is the id of the last revision applied to
+the URL.  This protects from applying revisions that were created from older
+URLs.
+
+=back
+
+=head1 SEE ALSO
+
+L<Kiddman::Controller::Site>
+
+=head1 AUTHOR
+
+Cory Watson <gphat@cpan.org>
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
 1;

@@ -13,6 +13,20 @@ use overload '""' => sub { $_[0]->name() }, fallback => 1;
 
 use base 'DBIx::Class';
 
+=head1 NAME
+
+Kiddman::Schema::Site - A Site managed by Kiddman
+
+=head1 SYNOPSIS
+
+    XXX Add a synopsis
+
+=head1 DESCRIPTION
+
+Sites are collections of URLs that are managed by Kiddman.
+
+=cut
+
 __PACKAGE__->load_components('TimeStamp', 'PK::Auto', 'InflateColumn::DateTime', 'Core');
 __PACKAGE__->table('sites');
 __PACKAGE__->add_columns(
@@ -52,7 +66,14 @@ __PACKAGE__->add_unique_constraint(
 );
 
 __PACKAGE__->has_many('urls' => 'Kiddman::Schema::URL', 'site_id');
-#__PACKAGE__->has_many('changesets' => 'Kiddman::Schema::ChangeSet', 'site_id');
+
+=head1 METHODS
+
+=over 4
+
+=item B<active>
+
+Active flag.
 
 =item B<apply_changeset>
 
@@ -80,6 +101,10 @@ sub apply_changeset {
     }
     return $count;
 }
+
+=item B<date_created>
+
+Date this site was created.
 
 =item B<get_url_arrayref>
 
@@ -132,6 +157,21 @@ sub get_url_tree {
     return $tree;
 }
 
+=item B<id>
+
+Id of this site.
+
+=item B<name>
+
+Name of this site.
+
+=item B<ttl>
+
+Time to live (in seconds) for this site.  Used by actual site implementation
+for caching.
+
+=cut
+
 sub _find_or_create_nodes {
 	my ($self, $tree, $path) = @_;
 
@@ -164,5 +204,22 @@ sub _find_or_create_nodes {
 
     return $node;
 }
+
+=back
+
+=head1 SEE ALSO
+
+L<Kiddman::Controller::URL>
+
+=head1 AUTHOR
+
+Cory Watson <gphat@cpan.org>
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 1;
