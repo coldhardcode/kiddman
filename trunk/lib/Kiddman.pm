@@ -4,18 +4,23 @@ use strict;
 use warnings;
 
 use Catalyst::Runtime '5.70';
-
-# Set flags and add plugins for the application
-#
-#         -Debug: activates the debug mode for very useful log messages
-#   ConfigLoader: will load the configuration from a Config::General file in the
-#                 application's home directory
-# Static::Simple: will serve static files from the application's root 
-#                 directory
-
 use parent qw/Catalyst/;
 
 our $VERSION = '0.01';
+
+=head1 NAME
+
+Kiddman - Meta-Content Management System
+
+=head1 SYNOPSIS
+
+    script/kiddman_server.pl
+
+=head1 DESCRIPTION
+
+[enter your description here]
+
+=cut
 
 # Configure the application. 
 #
@@ -40,9 +45,13 @@ __PACKAGE__->setup(qw/
     Static::Simple
 /);
 
-=item action_uri
+=head1 ACTIONS
 
-Convenience method for linking to chained actions
+=over 4
+
+=item B<action_uri>
+
+Convenience method for linking to chained actions.
 
 =cut
 sub action_uri {
@@ -50,7 +59,9 @@ sub action_uri {
     return $c->uri_for($c->controller($controller)->action_for($action), @params);
 }
 
-=item form_is_valid
+=item B<form_is_valid>
+
+Convenience method validating forms.
 
 =cut
 sub form_is_valid {
@@ -63,7 +74,10 @@ sub form_is_valid {
     return 1;
 }
 
-=item get_provider
+=item B<get_provider>
+
+Checks Kiddman's configuration options for a type provider for the given
+type.  Returns an instance of the type provider if one exists, else undef.
 
 =cut
 sub get_provider {
@@ -85,17 +99,7 @@ sub get_provider {
     }
 }
 
-=head1 NAME
-
-kiddman - Catalyst based application
-
-=head1 SYNOPSIS
-
-    script/kiddman_server.pl
-
-=head1 DESCRIPTION
-
-[enter your description here]
+=back
 
 =head1 SEE ALSO
 
@@ -103,7 +107,7 @@ L<Kiddman::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Cory Watson
+Cory Watson <gphat@cpan.org>
 
 =head1 LICENSE
 

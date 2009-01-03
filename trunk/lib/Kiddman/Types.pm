@@ -8,6 +8,8 @@ use MooseX::Types
 
 use MooseX::Types::Moose 'Str';
 
+enum 'Inputs' => qw(text select checkbox);
+
 subtype LongStr, as Str;
 
 1;

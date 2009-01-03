@@ -7,9 +7,10 @@ with 'Kiddman::TypeProvider';
 use Color;
 
 sub get_values {
-    my ($self) = @_;
+    my ($self, $site_id, $user_id) = @_;
 
-    my $things = ( UCString->new('one'), UCString->new('two') );
+    my @things = ( Color->new(name => 'one'), Color->new(name => 'two') );
+    return \@things;
 }
 
 1;

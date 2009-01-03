@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Color;
 use Poop::Page;
@@ -22,3 +22,6 @@ ok(!$tc->check($page), 'check invalidates page');
 Kiddman->config->{types}->{'Foo::Bar::Baz'} = 'TestProvider';
 my $provider = Kiddman->get_provider('Foo::Bar::Baz');
 isa_ok($provider, 'TestProvider');
+
+my $types = $provider->get_values(1, 'user_id');
+cmp_ok(ref($types), 'eq', 'ARRAY', 'got array of types');
