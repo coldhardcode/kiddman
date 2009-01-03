@@ -34,8 +34,8 @@ sub index :Path :Args(0) {
 sub login : Local {
     my ($self, $c) = @_;
 
-    if($c->authenticate({ username => $c->req->param('username'),
-                          password => $c->req->param('password') })) {
+    if($c->authenticate({ username => $c->req->params->{'username'},
+                          password => $c->req->params->{'password'} })) {
         $c->detach('/default');
     } else {
         $c->stash->{'error'} = $c->localize('The supplied credentials are incorrect.');

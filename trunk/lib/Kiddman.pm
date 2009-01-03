@@ -54,13 +54,35 @@ sub action_uri {
 
 =cut
 sub form_is_valid {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	if($self->form->has_invalid || $self->form->has_missing) {
-		return 0;
-	}
+    if($self->form->has_invalid || $self->form->has_missing) {
+        return 0;
+    }
 
-	return 1;
+    return 1;
+}
+
+=item get_provider
+
+=cut
+sub get_provider {
+    my ($self, $type) = @_;
+
+    if(defined($self->config->{types} && defined($self->config->{types}->{$type}))) {
+        my $provider = undef;
+        eval {
+            my $provname = $self->config->{types}->{$type};
+            Class::MOP::load_class($provname);
+            $provider = $provname->new;
+        };
+        if($@) {
+            print STDERR "$@";
+            $self->log->error("Failed to load type provider for '$type': $@");
+        }
+
+        return $provider;
+    }
 }
 
 =head1 NAME

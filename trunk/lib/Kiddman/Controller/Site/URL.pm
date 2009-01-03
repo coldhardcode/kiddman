@@ -71,12 +71,12 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
     my ($self, $c) = @_;
 
     my $url = $c->model('RW')->resultset('URL')->new({
-        page_id => $c->req->param('page'),
+        page_id => $c->req->params->{'page'},
         site_id => $c->stash->{context}->{site}->id,
-        options => $c->req->param('options') || undef,
-        description => $c->req->param('description') || undef,
+        options => $c->req->params->{'options'} || undef,
+        description => $c->req->params->{'description'} || undef,
         active => 0,
-        path => $c->req->param('path') || undef,
+        path => $c->req->params->{'path'} || undef,
         user_id => 'gphat'
     });
 
@@ -105,7 +105,7 @@ sub save : Chained('site_base') PathPart('save') Args(0) {
         user_id => 'gphat',
         active => 1,
         applied => 0,
-        options => $c->req->param('options') || undef,
+        options => $c->req->params->{'options'} || undef,
     });
 
     $c->form(required => [qw(page path description)]);

@@ -38,8 +38,8 @@ sub create : Local {
 	my ($self, $c) = @_;
 
 	my $site = $c->model('RW')->resultset('Site')->new({
-		name => $c->req->param('name') || undef,
-		active => $c->req->param('active') ? 1 : 0
+		name => $c->req->params->{'name'} || undef,
+		active => $c->req->params->{'active'} ? 1 : 0
 	});
 
 	$c->form(required => [qw(name)]);

@@ -2,14 +2,7 @@ package Kiddman::Page;
 use Moose;
 use Kiddman::Meta::Attribute::Trait::Labeled;
 
-use MooseX::Types
-    -declare => [qw(
-        LongStr
-    )];
-
-use MooseX::Types::Moose 'Str';
-
-subtype LongStr, as Str;
+use Kiddman::Types;
 
 has meta_description => (
     traits => [qw(Labeled)],

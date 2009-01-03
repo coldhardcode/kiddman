@@ -23,14 +23,14 @@ sub add : Local {
 
     $c->stash->{template} = 'changeset/add.tt';
 
-    my $onrevs = $c->req->param('revision');
+    my $onrevs = $c->req->params->{'revision'};
     if(!defined($onrevs) || (ref($onrevs) ne 'HASH')) {
         $c->stash->{message}->{error} = 'No revisions provided.';
         return;
     }
 
     my @revs;
-    foreach my $rev (keys(%{ $c->req->param('revision')})) {
+    foreach my $rev (keys(%{ $c->req->params->{'revision'} })) {
         $rev =~ s/^R//;
         push(@revs, $rev);
     }
@@ -70,14 +70,14 @@ sub confirm : Local {
 sub create : Local {
     my ($self, $c) = @_;
 
-    my $onrevs = $c->req->param('revision');
+    my $onrevs = $c->req->params->{'revision'};
     if(!defined($onrevs) || (ref($onrevs) ne 'HASH')) {
         $c->stash->{message}->{error} = 'No revisions provided.';
         return;
     }
 
     my @revs;
-    foreach my $rev (keys(%{ $c->req->param('revision')})) {
+    foreach my $rev (keys(%{ $c->req->params->{'revision'} })) {
         $rev =~ s/^R//;
         push(@revs, $rev);
     }
@@ -97,7 +97,7 @@ sub create : Local {
     my $makechange = sub {
         $changeset = $schema->resultset('ChangeSet')->create({
             applied => 0,
-            comment => $c->req->param('comment')
+            comment => $c->req->params->{'comment'}
         });
 
         $schema->resultset('Revision')->search({
