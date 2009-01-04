@@ -1,0 +1,42 @@
+=head1 NAME
+
+Kiddman::Tutorial - Kiddman Tutorial
+
+=head1 DESCRIPTION
+
+Kiddman is styled as a CMS (Content Management System) but it's not a CMS in
+the traditional sense.  This distinction is largely a concern of the
+developer, not of the "end-user".
+
+Kiddman, at a high level, does the following: pairs paths with page classes to
+allow end-users to manage the application.  The managed application then
+confers with Kiddman to find our a) which page to load and b) what arguments
+the path will be provided when instantiated.
+
+Kiddman has two major concepts: URLs and Pages.
+
+=head2 URL
+
+A URL in Kiddman is a path, like "/foo/bar" plus a page.
+
+=head2 Pages
+
+A Page is a class.  The class must extend L<Kiddman::Page>.  Using the power
+of L<Moose> (which is the enabler of all the magic Kiddman does) the
+attributes of the page can be discovered and end users merely set the values
+to influence the rendering of the page.
+
+=head1 SEE ALSO
+
+L<Kiddman::Schema::Revision>
+
+=head1 AUTHOR
+
+Cory Watson <gphat@cpan.org>
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
