@@ -31,6 +31,7 @@ sub not_found : Local {
     my ($self, $c) = @_;
 
     $c->stash->{template} = 'util/not_found.tt';
+    $c->res->status(404);
 }
 
 

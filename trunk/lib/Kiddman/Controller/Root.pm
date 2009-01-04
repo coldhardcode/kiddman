@@ -78,7 +78,16 @@ Attempt to render a view, if needed.
 
 =cut
 
-sub end : ActionClass('RenderView') {}
+sub end : Private {
+    my ($self, $c) = @_;
+
+    if(defined($c->stash->{view}) && $c->stash->{view} eq 'json') {
+        delete($c->stash->{view});
+        $c->forward('View::JSON');
+    } else {
+        $c->forward('View::TT');
+    }
+}
 
 =head1 AUTHOR
 

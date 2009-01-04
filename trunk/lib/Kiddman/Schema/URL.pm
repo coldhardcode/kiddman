@@ -25,6 +25,7 @@ URLs correspond to paths in the managed site.
 
 __PACKAGE__->load_components('TimeStamp', 'PK::Auto', 'InflateColumn::DateTime', 'Core');
 __PACKAGE__->table('urls');
+__PACKAGE__->resultset_class('Kiddman::ResultSet::URL');
 __PACKAGE__->add_columns(
     id  => {
         data_type   => 'INTEGER',
@@ -273,6 +274,52 @@ the URL.  This protects from applying revisions that were created from older
 URLs.
 
 =back
+
+=cut
+
+package Kiddman::ResultSet::URL;
+
+use base 'DBIx::Class::ResultSet';
+
+=head1 RESULTSET METHODS
+
+=over 4
+
+=item B<active>
+
+Finds active revisions.
+
+=cut
+
+sub active {
+    my ($self) = @_;
+
+    return $self->search({ active => 1 });
+}
+
+=item B<for_path>
+
+Find 
+
+=cut
+
+sub for_path {
+    my ($self, $path) = @_;
+
+    return $self->search({ path => $path });
+}
+
+=item B<for_site>
+
+Find URLS for the given site.
+
+=cut
+
+sub for_site {
+    my ($self, $site) = @_;
+
+    return $self->search({ site_id => $site->id });
+}
 
 =head1 SEE ALSO
 

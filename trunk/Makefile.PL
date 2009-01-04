@@ -15,6 +15,7 @@ requires 'Catalyst::Plugin::I18N';
 requires 'Catalyst::Plugin::Params::Nested';
 requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Runtime' => '5.7014';
+requires 'Catalyst::View::JSON';
 requires 'Catalyst::View::TT';
 requires 'Config::General'; # This should reflect the config file format you've chosen
                  # See Catalyst::Plugin::ConfigLoader for supported formats
@@ -22,6 +23,7 @@ requires 'DateTime';
 requires 'DBIx::Class';
 requires 'DBIx::Class::TimeStamp';
 requires 'File::Spec';
+requires 'JSON::XS';
 requires 'Moose';
 requires 'MooseX::Types';
 requires 'parent';

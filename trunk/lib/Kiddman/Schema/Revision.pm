@@ -22,7 +22,7 @@ Revisions are changes to URLs in Kiddman.
 
 __PACKAGE__->load_components('TimeStamp', 'PK::Auto', 'InflateColumn::DateTime', 'Core');
 __PACKAGE__->table('revisions');
-__PACKAGE__->resultset_class('Kiddman::ResultSet::Authorization');
+__PACKAGE__->resultset_class('Kiddman::ResultSet::Revision');
 __PACKAGE__->add_columns(
     id  => {
         data_type   => 'INTEGER',
@@ -248,7 +248,7 @@ revisions from being applied to URLs.
 
 =cut
 
-package Kiddman::ResultSet::Authorization;
+package Kiddman::ResultSet::Revision;
 
 use base 'DBIx::Class::ResultSet';
 
