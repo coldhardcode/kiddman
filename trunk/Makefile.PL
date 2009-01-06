@@ -24,6 +24,7 @@ requires 'DBIx::Class';
 requires 'DBIx::Class::TimeStamp';
 requires 'File::Spec';
 requires 'JSON::XS';
+requires 'Kiddman::Client';
 requires 'Moose';
 requires 'MooseX::Types';
 requires 'parent';

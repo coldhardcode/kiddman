@@ -1,6 +1,2 @@
 * Normalize errors as message->error / message->success
-* User id in Fetcher
-* Error checking in Fetcher
-* URL in Site, for linking
-* Integrate with Cat (jshirley)
- 
+* URL in Site, for linking 
