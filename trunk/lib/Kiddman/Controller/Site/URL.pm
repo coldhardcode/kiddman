@@ -64,6 +64,15 @@ sub edit : Chained('item_base') PathPart('edit') Args(0) {
 sub show : Chained('item_base') PathPart('show') Args(0) {
     my ($self, $c) = @_;
 
+    my $url = $c->stash->{context}->{url};
+
+    # XXX Nead some eval protection here
+    Class::MOP::load_class($url->page->class);
+    my $instance = $url->page->class->new($url->options);
+
+    $c->stash->{instance} = $instance;
+    $c->stash->{meta} = $instance->meta;
+
     $c->stash->{template} = 'site/url/show.tt';
 }
 

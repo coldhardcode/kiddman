@@ -41,13 +41,13 @@ sub item_base : Chained('/site/item_base') PathPart('page') CaptureArgs(1) {
 sub attributes : Chained('item_base') PathPart('attributes') Args(0) {
     my ( $self, $c ) = @_;
 
-	my $page = $c->stash->{context}->{page};
+    my $page = $c->stash->{context}->{page};
 
-	# XXX Nead some eval protection here
-	Class::MOP::load_class($page->class);
+    # XXX Nead some eval protection here
+    Class::MOP::load_class($page->class);
 
-	$c->stash->{meta} = $page->class->meta;
-	$c->stash->{template} = 'site/page/attributes.tt';
+    $c->stash->{meta} = $page->class->meta;
+    $c->stash->{template} = 'site/page/attributes.tt';
 }
 
 
