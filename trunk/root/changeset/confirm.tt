@@ -1,1 +1,9 @@
+[% changeset = context.changeset %]
 <h1>[% c.loc('Confirm ChangeSet') %]</h1>
+<form method="POST" action="[% c.action_uri('ChangeSet', 'apply', [ changeset.id ]) %]">
+  <p class="important">[% c.loc('Are you sure you want to apply this ChangeSet?') %]</p>
+  [% input_text(label => c.loc('Date to Apply'), name => 'apply_date') %]
+  <input type="submit" value="[% c.loc('Yes, Apply!') %]">
+</form>
+<br>
+[% INCLUDE changeset/info.tt %]

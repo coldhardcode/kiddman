@@ -50,8 +50,16 @@ sub add : Local {
 
 =cut
 
-sub apply : Local {
+sub apply : Chained('item_base') PathPart('apply') Args(0) {
+    my ($self, $c) = @_;
 
+    my $cs = $c->stash->{context}->{changeset};
+    $cs->publisher_id('gphat');
+    $cs->date_to_publish($c->req->params->{apply_date});
+    $cs->update;
+
+    $c->stash->{message}->{'success'} = $c->loc('ChangeSet scheduled for application');
+    $c->response->redirect($c->uri_for('/'), 301);
 }
 
 =head2 confirm

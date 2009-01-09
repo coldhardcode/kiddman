@@ -37,6 +37,7 @@
 [% SET tree = context.site.get_url_tree %]
 
 <div style="background-color: white">
+<a href="[% c.action_uri('Site', 'show', [ site.id ]) %]">[% site.name %]</a>
 <div id="markup">
 [% SET nodes = tree.getAllChildren %]
  <ul>

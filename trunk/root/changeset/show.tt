@@ -1,16 +1,3 @@
 [% changeset = context.changeset %]
 <h1>[% c.loc('ChangeSet [_1] Details', changeset.id) %]</h1>
-<form>
- <fieldset>
-  [% readonly_field(label => 'Date Created', value => changeset.date_created) %]
-  [% readonly_field(label => 'Comment', value => changeset.comment) %]
-  [% readonly_binary_field(label => 'Applied', value => changeset.applied) %]
- </fieldset>
-</form>
-<ul class="revlist">
-[% FOREACH rev = changeset.revisions %]
- <li><b>[% rev.op.name %]</b> Revision [% rev.id %] of <b>[% rev.url.path %]</b>
-  <p>[% rev.options %]</p>
- </li>
-[% END %]
-</ul>
+[% INCLUDE changeset/info.tt %]

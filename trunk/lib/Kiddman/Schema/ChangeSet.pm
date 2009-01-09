@@ -4,6 +4,8 @@ use warnings;
 
 use base 'DBIx::Class';
 
+use DateTime;
+
 =head1 NAME
 
 Kiddman::Schema::ChangeSet - Set of Revisions (changes)
@@ -23,8 +25,6 @@ ChangeSets are collections of revisions that a user has chosen to group
 together for application to a Site (or Sites).
 
 =head1 METHODS
-
-=over 4
 
 =cut
 
@@ -51,7 +51,7 @@ __PACKAGE__->add_columns(
     },
     date_to_publish => {
         data_type   => 'DATETIME',
-        is_nullable => 0,
+        is_nullable => 1,
         size        => undef
     },
     publisher_id => {
@@ -75,11 +75,11 @@ __PACKAGE__->set_primary_key('id');
 
 __PACKAGE__->has_many('revisions' => 'Kiddman::Schema::Revision', 'changeset_id');
 
-=item B<applied>
+=head2 applied
 
 Applied flag.
 
-=item B<apply>
+=head2 apply
 
 Applies all the Revisions in this ChangeSet.  If any of the Revisions fail to
 apply then this method will die (and all changes will be rolled back).  Returns
@@ -87,7 +87,9 @@ if there are no Revisions (which would be stupid).
 
 =cut
 sub apply {
-    my ($self) = @_;
+    my ($self, $userid) = @_;
+
+    $userid = 'SYSTEM' unless defined($userid);
 
     my $count = $self->revision_count;
     return if $count < 1;
@@ -97,39 +99,47 @@ sub apply {
         while(my $rev = $revs->next) {
             $rev->apply;
         }
+        $self->update({
+            applied => 1,
+            date_published => DateTime->now,
+            publisher_id => $userid
+        });
     };
 
     my $schema = $self->result_source->schema;
     eval {
         $schema->txn_do($app);
     };
+    if($@) {
+        die $@;
+    }
 }
 
-=item B<comment>
+=head2 comment
 
 Comment by the creator of this changeset.
 
-item B<date_created>
+=head2 date_created
 
 Date this changeset was created.
 
-=item B<date_published>
+=head2 date_published
 
 Date this changeset was published (applied).
 
-=item B<date_to_publish>
+=head2 date_to_publish
 
 The date this changeset is to be applied.  Used for delaying publishing.
 
-=item B<id>
+=head2 id
 
 This changesets's id.
 
-=item B<publisher_id>
+=head2 publisher_id
 
 User that published this changeset.
 
-=item B<revision_count>
+=head2 revision_count
 
 Returns the number of revisions in this changeset. I hate wantarray.
 
@@ -140,7 +150,7 @@ sub revision_count {
     return $self->revisions->count;
 }
 
-=item B<revisions>
+=head2 revisions
 
 Returns the revisions in this ChangeSet
 
@@ -154,21 +164,17 @@ use base 'DBIx::Class::ResultSet';
 
 =head1 RESULTSET METHODS
 
-=over 4
+=head2 pending
 
-=item B<pending>
-
-Returns all unapplied ChangeSets.
+Returns all unapplied ChangeSets that do not have a date_to_pbulish set.
 
 =cut
 
 sub pending {
     my ($self) = @_;
 
-    return $self->search({ applied => 0 });
+    return $self->search({ date_to_publish => \'IS NOT NULL', applied => 0 });
 }
-
-=back
 
 =head1 SEE ALSO
 

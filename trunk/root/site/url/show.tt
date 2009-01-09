@@ -1,6 +1,6 @@
 [% SET url = context.url %]
 <h1>[% c.loc('URL Details') %]</h1>
-<a href="[% c.action_uri('Site::URL', 'edit', [ context.site.id, url.id ]) %]">[% c.loc('Edit Page') %]</a>
+<a href="[% c.action_uri('Site::URL', 'edit', [ context.site.id, url.id ]) %]">[% c.loc('Edit URL') %]</a>
 <form>
  <fieldset>
   [% readonly_field({ label => c.loc('Path'), value => url.path }) %]
