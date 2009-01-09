@@ -54,7 +54,6 @@ my $options2 = { bar => 'baz' };
 my $rev2 = $url2->revise($op, 'gphat', $options2);
 
 my $changeset = $schema->resultset('ChangeSet')->create({
-    site_id => $site->id,
     applied => 0,
     comment => 'Test Comment',
     date_to_publish => DateTime->now,

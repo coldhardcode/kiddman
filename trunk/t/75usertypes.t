@@ -1,6 +1,8 @@
 use strict;
 use Test::More tests => 7;
 
+use lib 't/lib';
+
 use Color;
 use Poop::Page;
 use Kiddman;
