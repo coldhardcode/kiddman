@@ -46,20 +46,19 @@ sub add : Local {
     $c->stash->{revisions} = [ $revrs->all ];
 }
 
+=head2 apply
+
+=cut
+
+sub apply : Local {
+
+}
+
 =head2 confirm
 
 =cut
-sub confirm : Local {
+sub confirm : Chained('item_base') PathPart('confirm') Args(0) {
     my ($self, $c, $id) = @_;
-
-    my $change = $c->model('RW')->resultset('ChangeSet')->find($id);
-
-    unless(defined($change)) {
-        $c->stash->{message} = $c->localize('Unknown ChangeSet.');
-        $c->detach('/util/not_found');
-    }
-
-    $c->stash->{changeset} = $change;
 
     $c->stash->{template} = 'changeset/confirm.tt';
 }
@@ -121,10 +120,12 @@ sub create : Local {
     $c->response->redirect($c->uri_for('/'), 301);
 }
 
-=head2 show
+=head2 item_base
+
+Chain link to load a specific site.
 
 =cut
-sub show : Local {
+sub item_base : Chained('/') PathPart('changeset') CaptureArgs(1) {
     my ($self, $c, $id) = @_;
 
     my $change = $c->model('RW')->resultset('ChangeSet')->find($id);
@@ -134,7 +135,14 @@ sub show : Local {
         $c->detach('/util/not_found');
     }
 
-    $c->stash->{changeset} = $change;
+    $c->stash->{context}->{changeset} = $change;
+}
+
+=head2 show
+
+=cut
+sub show : Chained('item_base') PathPart('') Args(0) {
+    my ($self, $c, $id) = @_;
 
     $c->stash->{template} = 'changeset/show.tt';
 }

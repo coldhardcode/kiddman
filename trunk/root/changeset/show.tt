@@ -1,3 +1,4 @@
+[% changeset = context.changeset %]
 <h1>[% c.loc('ChangeSet [_1] Details', changeset.id) %]</h1>
 <form>
  <fieldset>

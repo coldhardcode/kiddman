@@ -1,14 +1,11 @@
 <h1>[% c.loc('Welcome!') %]</h1>
 <p>Welcome to this CMS like thingie.</p>
 <h2>[% c.loc('Pending ChangeSets') %]</h2>
-<form method="POST" action="">
- <ul>
-  [% FOREACH cs = changeset %]
-  <li><a href="[% c.uri_for('/changeset/show', cs.id) %]">[% cs.id %]</a> <a href="[% c.uri_for('/changeset/confirm', cs.id) %]">Apply</a></li>
-  [% END %]
-  <input type="submit" value="[% c.loc('Submit') %]">
- </ul>
-</form>
+<ul>
+ [% FOREACH cs = changeset %]
+ <li><a href="[% c.action_uri('ChangeSet', 'show', [ cs.id ]) %]">[% cs.id %]</a> <a href="[% c.action_uri('ChangeSet', 'confirm', [ cs.id ]) %]">Apply</a></li>
+ [% END %]
+</ul>
 <h2>[% c.loc('In Progress Revisions') %]</h2>
 <form method="POST" action="[% c.uri_for('/changeset/add') %]">
 <ul>

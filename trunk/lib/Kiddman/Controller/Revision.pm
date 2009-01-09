@@ -14,8 +14,6 @@ Catalyst Controller.
 
 =head1 METHODS
 
-=cut
-
 =head2 item_base
 
 Chain link to load a specific site.
@@ -33,6 +31,7 @@ sub item_base : Chained('/') PathPart('revision') CaptureArgs(1) {
 
     $c->stash->{context}->{revision} = $rev;
 }
+
 =head2 show
 
 Show a specific revision.
