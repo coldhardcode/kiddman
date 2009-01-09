@@ -1,5 +1,5 @@
 [% SET site = context.site %]
 <h1>[% c.loc('Edit Site [_1]', site.id) %]</h1>
-<form>
+<form method="POST">
 [% PROCESS site/form.tt %]
 </form>

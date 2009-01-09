@@ -104,20 +104,37 @@ __PACKAGE__->belongs_to('url' => 'Kiddman::Schema::URL', 'url_id');
 
 Active flag.
 
-=item B<apply>
+=head2 apply([ $url ])
 
-Apply this Revision to it's Entry.  If the Revision is not active or it's
+Apply this Revision to it's URL.  If the Revision is not active or it's
 status is 'Applied' it will not apply.  Sets the status to applied. Returns a
 1 for success, 0 for failure.
+
+B<NOTE:> If you pass in a URL then this method WILL NOT COMMIT CHANGES MADE.
+Passing in a URL means you want to manage the URL yourself.  You will need to
+call C<update> on B<both> this revision and the URL.
 
 If the version number of the URL does not match the version of this revision
 then this method will die.
 
 =cut
 sub apply {
-    my $self = shift;
+    my ($self, $url) = @_;
 
     unless($self->active) {
+        return 0;
+    }
+
+    # If no URL was passed in then fetch it.  This means we aren't in test
+    # mode.
+    my $test = 1;
+    unless(defined($url)) {
+        $url = $self->url;
+        $test = 0;
+    }
+
+    # In test mode we'll allow any ol' revision to be applied
+    if(!$test && ($self->status->name ne 'Pending')) {
         return 0;
     }
 
@@ -125,12 +142,6 @@ sub apply {
     my $appstatus = $schema->resultset('Status')->find(
         'Applied', { key => 'statuses_name' }
     );
-
-    if($self->status->name eq 'Applied') {
-        return 0;
-    }
-
-    my $url = $self->url;
 
     # Version checking.
     if(defined($url->version)) {
@@ -147,44 +158,36 @@ sub apply {
 
     # This is kinda messy here, but this app is pretty simple.  Maybe this
     # will get moved some day.
-    my $apply;
     if($op->name eq 'Change') {
-        $apply = sub {
 
-            $url->update({
-               options => $self->options,
-               version => $self->id
-            });
-            $self->update({ status => $appstatus });
-        };
+        $url->options($self->options);
+        $url->version($self->id);
     } elsif($op->name eq 'Activate') {
         if($url->active) {
             die('URL already active.');
         }
-        $apply = sub {
-            $url->update({
-                active => 1
-            });
-            $self->update({ status => $appstatus });
-        };
+        print STDERR "#### ASDASDDS\n";
+        $url->active(1);
     } elsif($op->name eq 'Deactivate') {
         if(!$url->active) {
             die('URL already inactive.');
         }
-        $apply = sub {
-            $url->update({
-                active => 0
-            });
-            $self->update({ status => $appstatus });
-        };
+        $url->active(0);
     }
 
-    eval {
-        $schema->txn_do($apply);
-    };
-    if($@) {
-        # Rethrow
-        die($@);
+    if(!$test) {
+        my $apply = sub {
+            $url->update;
+            $self->update({ status => $appstatus });
+        };
+
+        eval {
+            $schema->txn_do($apply);
+        };
+        if($@) {
+            # Rethrow
+            die($@);
+        }
     }
 
     return 1;
@@ -268,6 +271,17 @@ sub active {
     return $self->search({ active => 1 });
 }
 
+=head2 by_date 
+
+Order the revisions in this resultset by date created.
+
+=cut
+sub by_date {
+    my ($self) = @_;
+
+    return $self->search(undef, { order_by => \'date_created ASC'});
+}
+
 =item B<for_url>
 
 Finds revisions for the given url object.
@@ -315,6 +329,21 @@ sub pending {
 
     return $self->search(
         { 'status.name' => 'In Progress' },
+        { join => 'status' }
+    );
+}
+
+=head2 unapplied
+
+Finds any B<active> revisions that have not been applied.
+
+=cut
+
+sub unapplied {
+    my ($self) = @_;
+
+    return $self->search(
+        { active => 1, 'status.name' => { '!=' => 'Applied' } },
         { join => 'status' }
     );
 }

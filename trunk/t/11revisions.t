@@ -7,7 +7,7 @@ use KiddmanTest;
 
 BEGIN {
     eval "use DBD::SQLite";
-    plan $@ ? (skip_all => 'Needs DBD::SQLite for testing') : ( tests => 9);
+    plan $@ ? (skip_all => 'Needs DBD::SQLite for testing') : ( tests => 11);
 }
 
 my $schema = KiddmanTest->init_schema();
@@ -32,6 +32,9 @@ my $url = $schema->resultset('URL')->create({
 });
 
 my $op = $schema->resultset('Op')->find('Change', { key => 'ops_name' });
+my $status_pending = $schema->resultset('Status')->find(
+    'Pending', { key => 'statuses_name' }
+);
 
 my $options2 = { bar => 'baz' };
 my $rev = $url->revise($op, 'gphat', $options2);
@@ -45,11 +48,20 @@ cmp_ok($rev->options->{'bar'}, 'eq', 'baz', 'revision options');
 
 my $rev3 = $rev->copy;
 
+my $unaprs = $schema->resultset('Revision')->unapplied;
+cmp_ok($unaprs->count, '==', 2, '2 unapplied revisions');
+
+$rev->update({ status => $status_pending });
+
 my $ret = $rev->apply;
 cmp_ok($ret, '==', 1, 'revision applied');
 $url->discard_changes;
 cmp_ok($url->options->{'bar'}, 'eq', 'baz', 'url changed');
 cmp_ok($url->version, '==', $rev->id, 'url version set');
+
+cmp_ok($unaprs->count, '==', 1, '1 unapplied revisions');
+
+$rev3->update({ status => $status_pending });
 
 eval {
     $rev3->apply;

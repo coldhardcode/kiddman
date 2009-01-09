@@ -41,6 +41,8 @@ sub item_base : Chained('/site/item_base') PathPart('page') CaptureArgs(1) {
 sub attributes : Chained('item_base') PathPart('attributes') Args(0) {
     my ( $self, $c ) = @_;
 
+    $c->stash->{page}->{layout} = 'partial';
+
     my $page = $c->stash->{context}->{page};
 
     # XXX Nead some eval protection here
@@ -49,8 +51,6 @@ sub attributes : Chained('item_base') PathPart('attributes') Args(0) {
     $c->stash->{meta} = $page->class->meta;
     $c->stash->{template} = 'site/page/attributes.tt';
 }
-
-
 
 =head1 AUTHOR
 

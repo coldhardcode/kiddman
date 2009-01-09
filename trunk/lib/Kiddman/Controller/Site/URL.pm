@@ -21,23 +21,6 @@ Catalyst Controller.
 
 =cut
 
-sub site_base : Chained('/site/item_base') PathPart('url') CaptureArgs(0) {
-	my ($self, $c) = @_;
-}
-
-sub item_base : Chained('/site/item_base') PathPart('url') CaptureArgs(1) {
-	my ($self, $c, $id) = @_;
-
-    my $url = $c->model('RW')->resultset('URL')->find($id);
-
-    unless(defined($url)) {
-        $c->stash->{message} = 'Unknown URL.';
-        $c->detach('/util/not_found');
-    }
-
-    $c->stash->{context}->{url} = $url;
-}
-
 sub add : Chained('site_base') PathPart('add') Args(0) {
     my ($self, $c) = @_;
 
@@ -48,32 +31,6 @@ sub add : Chained('site_base') PathPart('add') Args(0) {
     $c->stash->{pages} = \@pages;
 
     $c->stash->{template} = 'site/url/add.tt';
-}
-
-sub edit : Chained('item_base') PathPart('edit') Args(0) {
-    my ($self, $c) = @_;
-
-    my @pages = $c->model('RW')->resultset('Page')->search({
-        active => 1
-    })->all;
-    $c->stash->{pages} = \@pages;
-
-    $c->stash->{template} = 'site/url/edit.tt';
-}
-
-sub show : Chained('item_base') PathPart('show') Args(0) {
-    my ($self, $c) = @_;
-
-    my $url = $c->stash->{context}->{url};
-
-    # XXX Nead some eval protection here
-    Class::MOP::load_class($url->page->class);
-    my $instance = $url->page->class->new($url->options);
-
-    $c->stash->{instance} = $instance;
-    $c->stash->{meta} = $instance->meta;
-
-    $c->stash->{template} = 'site/url/show.tt';
 }
 
 sub create : Chained('site_base') PathPart('create') Args(0) {
@@ -106,14 +63,54 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
     $c->response->redirect($c->action_uri('Site::URL', 'show', [ $url->id ]), 301);
 }
 
-sub save : Chained('site_base') PathPart('save') Args(0) {
+sub edit : Chained('item_base') PathPart('edit') Args(0) {
     my ($self, $c) = @_;
 
+    my $url = $c->stash->{context}->{url};
+    $url->revise_for_user('gphat');
+
+    # XXX Nead some eval protection here
+    Class::MOP::load_class($url->page->class);
+    my $instance = $url->page->class->new($url->options);
+
+    $c->stash->{instance} = $instance;
+    $c->stash->{meta} = $instance->meta;
+
+    $c->stash->{template} = 'site/url/edit.tt';
+}
+
+sub item_base : Chained('/site/item_base') PathPart('url') CaptureArgs(1) {
+    my ($self, $c, $id) = @_;
+
+    my $url = $c->model('RW')->resultset('URL')->find($id);
+
+    unless(defined($url)) {
+        $c->stash->{message} = 'Unknown URL.';
+        $c->detach('/util/not_found');
+    }
+
+    $c->stash->{context}->{url} = $url;
+}
+
+sub save : Chained('item_base') PathPart('save') Args(0) {
+    my ($self, $c) = @_;
+
+    my $url = $c->stash->{context}->{url};
+    my $act = $c->req->params->{active};
+
+    my $status = $c->model('RW')->resultset('Status')->find(
+        'In Progress', { key => 'statuses_name' }
+    );
+
+    my $status = $c->model('RW')->resultset('Op')->find(
+        'Change', { key => 'ops_name' }
+    );
+
     my $rev = $c->model('RW')->resultset('Revision')->new({
+        status => $status,
         url_id => $c->stash->{context}->{url}->id,
         user_id => 'gphat',
         active => 1,
-        applied => 0,
         options => $c->req->params->{'options'} || undef,
     });
 
@@ -126,6 +123,25 @@ sub save : Chained('site_base') PathPart('save') Args(0) {
     $rev->insert;
     $c->stash->{message}->{success} = $c->localize('Revision [_1] added successfully.', $rev->id);
     $c->response->redirect($c->action_uri('Site::URL', 'show', [ $rev->id ]), 301);
+}
+
+sub show : Chained('item_base') PathPart('show') Args(0) {
+    my ($self, $c) = @_;
+
+    my $url = $c->stash->{context}->{url};
+
+    # XXX Nead some eval protection here
+    Class::MOP::load_class($url->page->class);
+    my $instance = $url->page->class->new($url->options);
+
+    $c->stash->{instance} = $instance;
+    $c->stash->{meta} = $instance->meta;
+
+    $c->stash->{template} = 'site/url/show.tt';
+}
+
+sub site_base : Chained('/site/item_base') PathPart('url') CaptureArgs(0) {
+    my ($self, $c) = @_;
 }
 
 =head1 AUTHOR

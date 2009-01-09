@@ -153,7 +153,7 @@ sub is_leaf {
 
 =item B<make_new>
 
-Convenience method that creates a new page and an accompanying 'Pending'
+Convenience method that creates a new URL and an accompanying 'Pending'
 Revision that is in 'In Progress', all inside of a transaction.  Returns
 the revision on success, undef on failure.
 
@@ -250,6 +250,28 @@ sub revise {
 
     return $revision;
 }
+
+=head2 revise_for_user($user_id)
+
+Applies any active, unapplied revisions to the URL and returns the result but
+B<does not commit the result>.  You shouldn't commit it either, as the
+revisions applied would not be marked as such.
+
+=cut
+
+sub revise_for_user {
+    my ($self, $user_id) = @_;
+
+    # XXX Use MX::Method::Signatures, need to validate the user_id
+
+    my $revrs = $self->result_source->schema->resultset('Revision');
+    $revrs = $revrs->unapplied->for_user($user_id)->for_url($self)->by_date;
+
+    while(my $rev = $revrs->next) {
+        $rev->apply($self); # Apply in test mode
+    }
+}
+
 
 =item B<site>
 

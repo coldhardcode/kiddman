@@ -1,18 +1,17 @@
 [%
   typemap = {
     'Str' => 'types/str.tt',
-    'LongStr' => 'types/longstr.tt'
+    'Kiddman::Client::Types::LongStr' => 'types/longstr.tt'
   }
 %]
 <h2>Page Attributes</h2>
-[% page.layout = 'partial' %]
 [% SET attributes = meta.get_attribute_map %]
 [% FOREACH attr = attributes.keys %]
 
 [% IF attributes.$attr.has_label %]
   [% SET type = attributes.$attr.type_constraint.name %]
   <label><em>[% attributes.$attr.label %]: </em><span>
-   [% INCLUDE "${typemap.$type}" attr = { 'name' => attr, 'value' => ${page.$attr} } %]
+    [% INCLUDE "${typemap.$type}" attr = { 'name' => attr, 'value' => instance.$attr } %]
   </span>
  </label>
 [% END %]

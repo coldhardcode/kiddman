@@ -85,6 +85,9 @@ Applies all the Revisions in this ChangeSet.  If any of the Revisions fail to
 apply then this method will die (and all changes will be rolled back).  Returns
 if there are no Revisions (which would be stupid).
 
+Revisions are applied in reverse order, oldest first.  Inactive Revisions are
+skipped.
+
 =cut
 sub apply {
     my ($self, $userid) = @_;
@@ -95,7 +98,7 @@ sub apply {
     return if $count < 1;
 
     my $app = sub {
-        my $revs = $self->revisions;
+        my $revs = $self->revisions->active->by_date;
         while(my $rev = $revs->next) {
             $rev->apply;
         }

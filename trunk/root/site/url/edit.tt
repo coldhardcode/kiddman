@@ -1,8 +1,13 @@
 [% SET url = context.url %]
 <h1>[% c.loc('Edit URL') %]</h1>
-<fieldset>
- [% input_checkbox({ label => 'Active', name => 'active', value => url.active }) %]
- <div class="submit">
-   <input type="submit" value="[% c.loc('Submit') %]">
- </div>
-</fieldset>
+<form method="POST" action="[% c.action_uri('Site::URL', 'save', [ context.site.id, url.id ]) %]">
+ <fieldset>
+  [% input_checkbox({ label => 'Active', name => 'active', value => url.active }) %]
+  <div style="float: left; clear: both">
+  [% PROCESS 'site/page/attributes.tt' %]
+   <div class="submit">
+    <input type="submit" value="[% c.loc('Submit') %]">
+   </div>
+  </div>
+ </fieldset>
+</form>

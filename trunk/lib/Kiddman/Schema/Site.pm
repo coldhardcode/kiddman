@@ -135,7 +135,7 @@ are L<Kiddman::Directory> objects.
 sub get_url_tree {
     my $self = shift;
 
-    my $urls = $self->urls->search({ active => 1 }, { order_by => 'path' });
+    my $urls = $self->urls->active->search(undef, { order_by => 'path' });
 
     my $tree = new Tree::Simple($self, Tree::Simple->ROOT);
 
