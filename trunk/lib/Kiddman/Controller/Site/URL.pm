@@ -60,7 +60,8 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
     }
 
     $c->stash->{message}->{success} = $c->localize('URL [_1] added successfully.', $url->id);
-    $c->response->redirect($c->action_uri('Site::URL', 'show', [ $url->id ]), 301);
+    $c->response->redirect($c->action_uri('Site::URL', 'show', [ $url->id ]), 303);
+	$c->response->body('Redirect');
 }
 
 sub edit : Chained('item_base') PathPart('edit') Args(0) {
@@ -68,6 +69,12 @@ sub edit : Chained('item_base') PathPart('edit') Args(0) {
 
     my $url = $c->stash->{context}->{url};
     $url->revise_for_user('gphat');
+
+    my $revcount = $c->model('RW')->resultset('Revision')->pending->for_user('gphat')->for_url($url)->by_date->count;
+	if($revcount) {
+		$c->stash->{message}->{'warning'} = $c->loc('Current view is affected by [_1] in-progress revisions.', $revcount);
+	}
+	$c->stash->{revcount} = $revcount;
 
     # XXX Nead some eval protection here
     Class::MOP::load_class($url->page->class);
@@ -96,39 +103,35 @@ sub save : Chained('item_base') PathPart('save') Args(0) {
     my ($self, $c) = @_;
 
     my $url = $c->stash->{context}->{url};
-    my $act = $c->req->params->{active};
+    my $act = defined($c->req->params->{active}) ? 1 : 0;
+	my $opts = $c->req->params->{options} || undef;
 
-    my $status = $c->model('RW')->resultset('Status')->find(
-        'In Progress', { key => 'statuses_name' }
-    );
-
-    my $status = $c->model('RW')->resultset('Op')->find(
-        'Change', { key => 'ops_name' }
-    );
-
-    my $rev = $c->model('RW')->resultset('Revision')->new({
-        status => $status,
-        url_id => $c->stash->{context}->{url}->id,
-        user_id => 'gphat',
-        active => 1,
-        options => $c->req->params->{'options'} || undef,
-    });
-
-    $c->form(required => [qw(page path description)]);
+    $c->form(required => [qw(description)]);
     unless($c->form_is_valid) {
         $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors');
         $c->detach('add');
     }
 
-    $rev->insert;
-    $c->stash->{message}->{success} = $c->localize('Revision [_1] added successfully.', $rev->id);
-    $c->response->redirect($c->action_uri('Site::URL', 'show', [ $rev->id ]), 301);
+	my $revs = $url->revise('gphat', $act, $opts);
+
+	if(scalar(@{ $revs })) {
+    	$c->stash->{message}->{success} = $c->localize('Revision(s) added successfully.', scalar(@{ $revs }));
+	} else {
+    	$c->stash->{message}->{warning} = $c->localize('No Revisions added.');
+	}
+    $c->response->redirect($c->action_uri('Site::URL', 'show', [ $url->site_id, $url->id ]), 303);
+	$c->response->body('Redirect');
 }
 
 sub show : Chained('item_base') PathPart('show') Args(0) {
     my ($self, $c) = @_;
 
     my $url = $c->stash->{context}->{url};
+
+    my $revcount = $c->model('RW')->resultset('Revision')->pending->for_user('gphat')->for_url($url)->by_date->count;
+	if($revcount) {
+		$c->stash->{message}->{'warning'} = $c->loc('You have [_1] revisions in progress for this URL.', $revcount);
+	}
 
     # XXX Nead some eval protection here
     Class::MOP::load_class($url->page->class);

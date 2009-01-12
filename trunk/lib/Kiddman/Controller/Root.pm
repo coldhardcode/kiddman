@@ -84,6 +84,8 @@ sub end : Private {
     if(defined($c->stash->{view}) && $c->stash->{view} eq 'json') {
         delete($c->stash->{view});
         $c->forward('View::JSON');
+	} elsif($c->response->body) {
+		$c->detach;
     } else {
         $c->forward('View::TT');
     }

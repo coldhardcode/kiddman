@@ -50,7 +50,8 @@ sub create : Local {
 
 	$site->insert;
 	$c->stash->{message}->{success} = $c->localize('Site [_1] added successfully.', $site->id);
-	$c->response->redirect($c->action_uri('Site', 'show', [ $site->id ]), 301);
+	$c->response->redirect($c->action_uri('Site', 'show', [ $site->id ]), 303);
+	$c->response->body('Redirect');
 }
 
 =item B<fetch_url>

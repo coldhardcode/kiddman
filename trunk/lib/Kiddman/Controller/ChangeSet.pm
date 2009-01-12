@@ -59,7 +59,8 @@ sub apply : Chained('item_base') PathPart('apply') Args(0) {
     $cs->update;
 
     $c->stash->{message}->{'success'} = $c->loc('ChangeSet scheduled for application');
-    $c->response->redirect($c->uri_for('/'), 301);
+    $c->response->redirect($c->uri_for('/'), 303);
+	$c->response->body('Redirect');
 }
 
 =head2 confirm
@@ -125,7 +126,8 @@ sub create : Local {
 
 
     $c->stash->{message}->{success} = $c->localize('ChangeSet [_1] created successfully.', $changeset->id);
-    $c->response->redirect($c->uri_for('/'), 301);
+    $c->response->redirect($c->uri_for('/'), 303);
+	$c->response->body('Redirect');
 }
 
 =head2 item_base
