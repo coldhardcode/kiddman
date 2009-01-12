@@ -234,6 +234,18 @@ p.subdued {
     padding: 7px 1em;
     font-size: 1.23em;
 }
+#omessage {
+    background: #b82c2b url('/static/images/o-round-box-right.png') no-repeat right top;
+    color: #fff;
+    margin: 0 0 0 1em;
+    overflow: hidden;
+    width: 50%;
+}
+#omessage p {
+    background: url('/static/images/o-round-box-left.png') no-repeat left top;
+    padding: 7px 1em;
+    font-size: 1.23em;
+}
 #notice {
     background: #ab0706 url('/static/images/round-box-right.png') no-repeat right top;
     color: #fff;
