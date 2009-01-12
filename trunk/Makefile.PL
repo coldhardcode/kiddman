@@ -28,6 +28,7 @@ requires 'Kiddman::Client';
 requires 'Moose';
 requires 'MooseX::Types';
 requires 'parent';
+requires 'Test::Deep';
 requires 'Tree::Simple';
 requires 'Tree::Simple::VisitorFactory';
 requires 'YAML::XS';

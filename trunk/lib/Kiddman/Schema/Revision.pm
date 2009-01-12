@@ -166,7 +166,6 @@ sub apply {
         if($url->active) {
             die('URL already active.');
         }
-        print STDERR "#### ASDASDDS\n";
         $url->active(1);
     } elsif($op->name eq 'Deactivate') {
         if(!$url->active) {

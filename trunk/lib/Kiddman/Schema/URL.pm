@@ -5,6 +5,7 @@ use warnings;
 use base 'DBIx::Class';
 
 use File::Spec;
+use Test::Deep::NoTest;
 use YAML::XS;
 
 use overload '""' => sub { $_[0]->file }, fallback => 1;
@@ -219,25 +220,51 @@ Path of this URL.
 Creates a revision from this URL or modifies any extant unapplied revisions by this user
 to have the specified options.  The new Revision will have a version number
 that matches the current version of the this URL.  See C<Revision>'s C<apply>
-method for more details.
+method for more details.  Returns an arrayref of revisions... one for each created
+by this method.
 
 =cut
 sub revise {
-    my ($self, $op, $user, $options) = @_;
+    my ($self, $user, $active, $options) = @_;
 
     my $schema = $self->result_source->schema;
 
+	$self->revise_for_user($user);
+
+	# Any newly created revisions will need this...
+    my $status = $schema->resultset('Status')->find(
+        'In Progress', { key => 'statuses_name' }
+    );
     my $revrs = $schema->resultset('Revision');
+	my @revisions;
 
-    my $revision = $revrs->op($op)->for_url($self)->for_user($user)->pending->single;
+	# Check if the active flag is involved.
+	if($active != $self->active) {
+		my $op;
+		if($active) {
+			# They want to active an inactive page
+			$op = $schema->resultset('Op')->find('Activate', { key => 'ops_name' });
+		} else {
+			# They want to deactive an active page, create a revision for it
+			$op = $schema->resultset('Op')->find('Deactivate', { key => 'ops_name' });
+		}
 
-    unless(defined($revision)) {
+        my $rev = $schema->resultset('Revision')->create({
+            url_id => $self->id,
+            op_id => $op->id,
+            status_id => $status->id,
+            user_id => $user,
+            active => 1,
+            version => $self->version
+        });
+		push(@revisions, $rev);
+	}
 
-        my $status = $schema->resultset('Status')->find(
-            'In Progress', { key => 'statuses_name' }
-        );
+	# Check the options and create a revision if they don't match.
+	unless(eq_deeply($options, $self->options)) {
 
-        $revision = $schema->resultset('Revision')->create({
+		my $op = $schema->resultset('Op')->find('Change', { key => 'ops_name' });
+        my $rev = $schema->resultset('Revision')->create({
             url_id => $self->id,
             op_id => $op->id,
             status_id => $status->id,
@@ -246,9 +273,10 @@ sub revise {
             active => 1,
             version => $self->version
         });
+		push(@revisions, $rev);
     }
 
-    return $revision;
+	return \@revisions;
 }
 
 =head2 revise_for_user($user_id)
@@ -265,7 +293,7 @@ sub revise_for_user {
     # XXX Use MX::Method::Signatures, need to validate the user_id
 
     my $revrs = $self->result_source->schema->resultset('Revision');
-    $revrs = $revrs->unapplied->for_user($user_id)->for_url($self)->by_date;
+    $revrs = $revrs->pending->for_user($user_id)->for_url($self)->by_date;
 
     while(my $rev = $revrs->next) {
         $rev->apply($self); # Apply in test mode

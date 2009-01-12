@@ -7,7 +7,7 @@ use KiddmanTest;
 
 BEGIN {
     eval "use DBD::SQLite";
-    plan $@ ? (skip_all => 'Needs DBD::SQLite for testing') : ( tests => 11);
+    plan $@ ? (skip_all => 'Needs DBD::SQLite for testing') : ( tests => 12);
 }
 
 my $schema = KiddmanTest->init_schema();
@@ -28,7 +28,8 @@ my $url = $schema->resultset('URL')->create({
     options => {
         foo => 'bar'
     },
-    description => 'Description'
+    description => 'Description',
+	active => 1
 });
 
 my $op = $schema->resultset('Op')->find('Change', { key => 'ops_name' });
@@ -37,12 +38,14 @@ my $status_pending = $schema->resultset('Status')->find(
 );
 
 my $options2 = { bar => 'baz' };
-my $rev = $url->revise($op, 'gphat', $options2);
+my $revs = $url->revise('gphat', 1, $options2);
+cmp_ok(scalar(@{ $revs }), '==', 1, '1 revision made');
+my $rev = $revs->[0];
 ok(defined($rev), 'got a revision');
 isa_ok($rev, 'Kiddman::Schema::Revision');
 
-my $rev2 = $url->revise($op, 'gphat', $options2);
-cmp_ok($rev->id, '==', $rev2->id, 'didnt dupe rev');
+my $revs2 = $url->revise('gphat', 1, $options2);
+cmp_ok(scalar(@{ $revs2 }), '==', 0, '0 revisions made');
 
 cmp_ok($rev->options->{'bar'}, 'eq', 'baz', 'revision options');
 
