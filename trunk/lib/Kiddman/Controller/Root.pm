@@ -49,12 +49,16 @@ sub index : Chained('base') PathPart('') Args(0) {
 
     my $status = $schema->resultset('Status');
 
-    my $urls = $schema->resultset('URL')->pending_revisions_by_user('gphat');
+    my $urls = $schema->resultset('URL')->pending_url_revisions_by_user('gphat');
     $c->stash->{urls} = [ $urls->all ];
 
-    my $cses = $schema->resultset('ChangeSet')->pending;
+    my $cs_rs = $schema->resultset('ChangeSet');
 
-    $c->stash->{changeset} = [ $cses->all ];
+    my $pending = $cs_rs->pending;
+    my $scheduled = $cs_rs->scheduled;
+
+    $c->stash->{pending_changesets} = [ $pending->all ];
+    $c->stash->{scheduled_changesets} = [ $scheduled->all ];
 
     $c->stash->{template} = 'default.tt';
 }

@@ -272,13 +272,17 @@ sub active {
 
 =head2 by_date 
 
-Order the revisions in this resultset by date created.
+Order the revisions in this resultset by date created, ascending.
 
 =cut
 sub by_date {
-    my ($self) = @_;
+    my ($self, $dir) = @_;
 
-    return $self->search(undef, { order_by => \'date_created ASC'});
+    unless(defined($dir)) {
+        $dir = 'ASC';
+    }
+
+    return $self->search(undef, { order_by => \"date_created $dir"});
 }
 
 =item B<for_url>
@@ -330,6 +334,16 @@ sub pending {
         { 'status.name' => 'In Progress' },
         { join => 'status' }
     );
+}
+
+=head2 pending_for_user_for_url
+
+=cut
+
+sub pending_for_user_for_url {
+    my ($self, $user, $url) = @_;
+
+    return $self->pending->active->for_user($user)->for_url($url);
 }
 
 =head2 unapplied

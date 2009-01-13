@@ -1,8 +1,14 @@
 <h1>[% c.loc('Welcome!') %]</h1>
 <p>Welcome to this CMS like thingie.</p>
+<h2>[% c.loc('Scheduled ChangeSets') %]</h2>
+<ul>
+ [% FOREACH cs = scheduled_changesets %]
+ <li><a href="[% c.action_uri('ChangeSet', 'show', [ cs.id ]) %]">[% cs.id %]</a> [% cs.date_created %]</li>
+ [% END %]
+</ul>
 <h2>[% c.loc('Pending ChangeSets') %]</h2>
 <ul>
- [% FOREACH cs = changeset %]
+ [% FOREACH cs = pending_changesets %]
  <li><a href="[% c.action_uri('ChangeSet', 'show', [ cs.id ]) %]">[% cs.id %]</a> <a href="[% c.action_uri('ChangeSet', 'confirm', [ cs.id ]) %]">Apply</a></li>
  [% END %]
 </ul>

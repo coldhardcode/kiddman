@@ -43,7 +43,7 @@ sub add : Local {
     my $urlrs = $c->model('RW')->resultset('URL')->search({
         'me.id' => { '-in' => \@urls }
     });
-    $c->stash->{urls} = [ $urlrs->pending_revisions_by_user('gphat')->all ];
+    $c->stash->{urls} = [ $urlrs->pending_url_revisions_by_user('gphat')->all ];
 }
 
 =head2 apply
@@ -78,20 +78,20 @@ sub confirm : Chained('item_base') PathPart('confirm') Args(0) {
 sub create : Local {
     my ($self, $c) = @_;
 
-    my $onrevs = $c->req->params->{'revision'};
+    my $onrevs = $c->req->params->{'url'};
     if(!defined($onrevs) || (ref($onrevs) ne 'HASH')) {
-        $c->stash->{message}->{error} = 'No revisions provided.';
+        $c->stash->{message}->{error} = $c->loc('No URLs provided.');
         return;
     }
 
-    my @revs;
-    foreach my $rev (keys(%{ $c->req->params->{'revision'} })) {
-        $rev =~ s/^R//;
-        push(@revs, $rev);
+    my @urls;
+    foreach my $url (keys(%{ $c->req->params->{'url'} })) {
+        $url =~ s/^U//;
+        push(@urls, $url);
     }
 
-    unless(scalar(@revs)) {
-        $c->stash->{message}->{error} = 'No revisions provided.';
+    unless(scalar(@urls)) {
+        $c->stash->{message}->{error} = $c->loc('No URLs provided.');
         return;
     }
 
@@ -101,6 +101,8 @@ sub create : Local {
         key => 'statuses_name'
     });
 
+    my $url_rs = $c->model('RW')->resultset('URL');
+
     my $changeset;
     my $makechange = sub {
         $changeset = $schema->resultset('ChangeSet')->create({
@@ -108,12 +110,18 @@ sub create : Local {
             comment => $c->req->params->{'comment'}
         });
 
-        $schema->resultset('Revision')->search({
-            'me.id' => { '-in' => \@revs }
-        })->update({
-            changeset_id => $changeset->id,
-            status_id => $status->id
-        })
+        foreach my $url (@urls) {
+            my $u = $url_rs->find($url);
+
+            my $revrs = $schema->resultset('Revision')->pending_for_user_for_url('gphat', $u);
+            my @revids = $revrs->get_column('me.id')->all;
+            $schema->resultset('Revision')->search({
+                id => { '-in' => \@revids}
+            })->update({
+                changeset_id => $changeset->id,
+                status_id => $status->id
+            });
+        }
     };
 
     eval {

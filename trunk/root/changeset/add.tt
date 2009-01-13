@@ -1,8 +1,15 @@
 <h1>[% c.loc('Add ChangeSet') %]</h1>
 <form method="POST" action="[% c.uri_for('/changeset/create') %]">
-<input type="text" name="comment">
-[% FOREACH url = urls %]
-<input type="checkbox" name="url.U[% url.id %]"> <a href="[% c.action_uri('Revision', 'show', [ rev.id ]) %]">[% c.loc('[_1] Revision(s) for [_2] : [_3]', url.get_column('rev_count'), url.site.name,  url.path) %]</a><br />
-[% END %]
-<input type="submit" value="[% c.loc('Submit') %]">
+ <fieldset>
+  [% input_textarea({ label => 'Comment', name => 'comment' }) %]
+  <label>
+   <em>[% c.loc('URLs') %]</em>
+   <fieldset class="cwrap">
+    [% FOREACH url = urls %]
+    <label><input type="checkbox" name="url.U[% url.id %]"> <a style="padding: 0 0 0 .5em" href="[% c.action_uri('Site::URL', 'show', [ url.site_id, url.id ]) %]">[% c.loc('[_1] Revision(s) for [_2] : [_3]', url.get_column('rev_count'), url.site.name,  url.path) %]</a></label>
+    [% END %]
+   </fieldset>
+  </label>
+  <div class="submit"><input type="submit" value="[% c.loc('Submit') %]"></div>
+ </fieldset>
 </form>

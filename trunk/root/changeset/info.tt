@@ -1,13 +1,15 @@
 <form>
  <fieldset>
   [% readonly_field(label => 'Date Created', value => changeset.date_created) %]
+  [% readonly_field(label => 'Date To Publish', value => changeset.date_to_publish) %]
+  [% readonly_field(label => 'Date Published', value => changeset.date_published) %]
   [% readonly_field(label => 'Comment', value => changeset.comment) %]
   [% readonly_binary_field(label => 'Applied', value => changeset.applied) %]
  </fieldset>
 </form>
 <ul class="revlist">
 [% FOREACH rev = changeset.revisions %]
- <li><b>[% rev.op.name %]</b> Revision [% rev.id %] of <b>[% rev.url.path %]</b>
+ <li>[% c.loc('Revision [_1]:', rev.id) %] <b>[% rev.op.name %]</b> [% rev.url.path %]</li>
   <p>[% rev.options %]</p>
  </li>
 [% END %]

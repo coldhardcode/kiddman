@@ -38,6 +38,12 @@ __PACKAGE__->add_columns(
         size        => undef,
         is_auto_increment => 1,
     },
+    active => {
+        data_type => 'TINYINT',
+        is_nullable => 0,
+        size => 1,
+        default => 1
+    },
     applied => {
         data_type => 'TINYINT',
         is_nullable => 0,
@@ -167,16 +173,40 @@ use base 'DBIx::Class::ResultSet';
 
 =head1 RESULTSET METHODS
 
+=head2 active
+
+Returns all active ChangeSets
+
+=cut
+
+sub active {
+    my ($self) = @_;
+
+    return $self->search({ active => 1 });
+}
+
+=head2 scheduled
+
+Returns all unapplied ChangeSets that do not have a date_to_publish set.
+
+=cut
+
+sub scheduled {
+    my ($self) = @_;
+
+    return $self->active->search({ date_to_publish => \'IS NOT NULL', applied => 0 });
+}
+
 =head2 pending
 
-Returns all unapplied ChangeSets that do not have a date_to_pbulish set.
+Returns all unapplied ChangeSets that do not have a date_to_publish set.
 
 =cut
 
 sub pending {
     my ($self) = @_;
 
-    return $self->search({ date_to_publish => \'IS NOT NULL', applied => 0 });
+    return $self->search({ date_to_publish => \'IS NULL', applied => 0 });
 }
 
 =head1 SEE ALSO

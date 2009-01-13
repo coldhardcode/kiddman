@@ -369,11 +369,15 @@ sub for_site {
     return $self->search({ site_id => $site->id });
 }
 
-=head2 pending_revisions_by_user
+=head2 pending_url_revisions_by_user
+
+Returns all the URLs this user has with pending revisions, plus an extra column
+(retrieved with get_column) named 'rev_count' that counts the total number of
+revisions pending for the given URL.
 
 =cut
 
-sub pending_revisions_by_user {
+sub pending_url_revisions_by_user {
     my ($self, $userid) = @_;
 
     return $self->search(
