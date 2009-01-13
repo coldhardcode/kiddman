@@ -72,7 +72,7 @@ sub edit : Chained('item_base') PathPart('edit') Args(0) {
 
     my $revcount = $c->model('RW')->resultset('Revision')->pending->for_user('gphat')->for_url($url)->by_date->count;
 	if($revcount) {
-		$c->stash->{message}->{'warning'} = $c->loc('Current view is affected by [_1] in-progress revisions.', $revcount);
+		$c->stash->{message}->{'warning'} = $c->loc('Current view is affected by [_1] uncommitted changes.', $revcount);
 	}
 	$c->stash->{revcount} = $revcount;
 
@@ -106,11 +106,12 @@ sub save : Chained('item_base') PathPart('save') Args(0) {
     my $act = defined($c->req->params->{active}) ? 1 : 0;
 	my $opts = $c->req->params->{options} || undef;
 
-    $c->form(required => [qw(description)]);
-    unless($c->form_is_valid) {
-        $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors');
-        $c->detach('add');
-    }
+    #XXX Validation
+    # $c->form(required => [qw(description)]);
+    # unless($c->form_is_valid) {
+        # $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors');
+        # $c->detach('add');
+    # }
 
 	my $revs = $url->revise('gphat', $act, $opts);
 
@@ -129,9 +130,12 @@ sub show : Chained('item_base') PathPart('show') Args(0) {
     my $url = $c->stash->{context}->{url};
 
     my $revcount = $c->model('RW')->resultset('Revision')->pending->for_user('gphat')->for_url($url)->by_date->count;
-	if($revcount) {
-		$c->stash->{message}->{'warning'} = $c->loc('You have [_1] revisions in progress for this URL.', $revcount);
-	}
+    if($revcount) {
+        $c->stash->{message}->{'warning'} = $c->loc('You have [_1] uncommitted changes for this URL.', $revcount);
+        # Pass a production version of this URL to the controller.
+        $c->stash->{original_url} = $c->model('RW')->resultset('URL')->find($url->id);
+
+    }
 
     # XXX Nead some eval protection here
     Class::MOP::load_class($url->page->class);

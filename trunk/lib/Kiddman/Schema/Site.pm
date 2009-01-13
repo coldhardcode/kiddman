@@ -56,7 +56,7 @@ __PACKAGE__->add_columns(
         data_type   => 'DATETIME',
         is_nullable => 0,
         size        => undef,
-		set_on_create => 1
+        set_on_create => 1
     }
 );
 __PACKAGE__->set_primary_key('id');

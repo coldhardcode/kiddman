@@ -9,8 +9,8 @@
 <h2>[% c.loc('In Progress Revisions') %]</h2>
 <form method="POST" action="[% c.uri_for('/changeset/add') %]">
 <ul>
- [% FOREACH rev = revisions %]
- <li><input type="checkbox" name="revision.R[% rev.id %]"> <a href="[% c.action_uri('Revision', 'show', [ rev.id ]) %]">[% c.loc('Revision [_1] for [_2] : [_3]', rev.id, rev.url.site.name,  rev.url.path) %]</a></li>
+ [% FOREACH url = urls %]
+ <li><input type="checkbox" name="url.U[% url.id %]"> <a href="[% c.action_uri('Site::URL', 'show', [ url.site_id, url.id ]) %]">[% c.loc('[_1] Revision(s) for [_2] of [_3]', url.get_column('rev_count'), url.path, url.site.name) %]</a></li>
  [% END %]
  <input type="submit" value="[% c.loc('Submit') %]">
 </ul>

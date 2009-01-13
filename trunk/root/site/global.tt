@@ -48,14 +48,14 @@ MACRO input_select(info) BLOCK %]
 [%~ MACRO readonly_field(info) BLOCK %]
 <label><em>[% info.label %]: </em>
 [% IF info.url %]
- <span><a href="[% info.url %]">[% info.value %]</a></span>
+ <span><a href="[% info.url %]">[% info.value %]</a>[% IF info.extra %]<span class="extra">([% info.extra %])</span>[% END %]</span>
 [% ELSE %]
- <span>[% info.value %]</span>
+ <span>[% info.value %]</span>[% IF info.extra %] <span class="extra">[% info.extra %]</span>[% END %]
 [% END %]
 </label>
 [% END %]
 [%~ MACRO readonly_binary_field(info) BLOCK %]
-<label><em>[% info.label %]: </em><span class="[% IF info.value %]success[% ELSE %]error[% END %]">[% IF info.value %]Yes[% ELSE %]No[% END %]</span></label>
+<label><em>[% info.label %]: </em><span class="[% IF info.value %]success[% ELSE %]error[% END %]">[% IF info.value %]Yes[% ELSE %]No[% END %]</span>[% IF info.extra %] <span class="extra">[% info.extra %]</span>[% END %]</label>
 [% END ~%]
 
 

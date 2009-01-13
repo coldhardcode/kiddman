@@ -104,6 +104,7 @@ __PACKAGE__->add_unique_constraint(
 
 __PACKAGE__->belongs_to('site' => 'Kiddman::Schema::Site', 'site_id');
 __PACKAGE__->belongs_to('page' => 'Kiddman::Schema::Page', 'page_id');
+__PACKAGE__->has_many('revisions' => 'Kiddman::Schema::Revision', 'url_id');
 
 =head1 METHODS
 
@@ -229,25 +230,25 @@ sub revise {
 
     my $schema = $self->result_source->schema;
 
-	$self->revise_for_user($user);
+    $self->revise_for_user($user);
 
-	# Any newly created revisions will need this...
+    # Any newly created revisions will need this...
     my $status = $schema->resultset('Status')->find(
         'In Progress', { key => 'statuses_name' }
     );
     my $revrs = $schema->resultset('Revision');
-	my @revisions;
+    my @revisions;
 
-	# Check if the active flag is involved.
-	if($active != $self->active) {
-		my $op;
-		if($active) {
-			# They want to active an inactive page
-			$op = $schema->resultset('Op')->find('Activate', { key => 'ops_name' });
-		} else {
-			# They want to deactive an active page, create a revision for it
-			$op = $schema->resultset('Op')->find('Deactivate', { key => 'ops_name' });
-		}
+    # Check if the active flag is involved.
+    if($active != $self->active) {
+        my $op;
+        if($active) {
+            # They want to active an inactive page
+            $op = $schema->resultset('Op')->find('Activate', { key => 'ops_name' });
+        } else {
+            # They want to deactive an active page, create a revision for it
+            $op = $schema->resultset('Op')->find('Deactivate', { key => 'ops_name' });
+        }
 
         my $rev = $schema->resultset('Revision')->create({
             url_id => $self->id,
@@ -257,13 +258,13 @@ sub revise {
             active => 1,
             version => $self->version
         });
-		push(@revisions, $rev);
-	}
+        push(@revisions, $rev);
+    }
 
-	# Check the options and create a revision if they don't match.
-	unless(eq_deeply($options, $self->options)) {
+    # Check the options and create a revision if they don't match.
+    unless(eq_deeply($options, $self->options)) {
 
-		my $op = $schema->resultset('Op')->find('Change', { key => 'ops_name' });
+        my $op = $schema->resultset('Op')->find('Change', { key => 'ops_name' });
         my $rev = $schema->resultset('Revision')->create({
             url_id => $self->id,
             op_id => $op->id,
@@ -273,10 +274,10 @@ sub revise {
             active => 1,
             version => $self->version
         });
-		push(@revisions, $rev);
+        push(@revisions, $rev);
     }
 
-	return \@revisions;
+    return \@revisions;
 }
 
 =head2 revise_for_user($user_id)
@@ -299,7 +300,6 @@ sub revise_for_user {
         $rev->apply($self); # Apply in test mode
     }
 }
-
 
 =item B<site>
 
@@ -333,9 +333,7 @@ use base 'DBIx::Class::ResultSet';
 
 =head1 RESULTSET METHODS
 
-=over 4
-
-=item B<active>
+=head2 active
 
 Finds active revisions.
 
@@ -347,7 +345,7 @@ sub active {
     return $self->search({ active => 1 });
 }
 
-=item B<for_path>
+=head2 for_path
 
 Find 
 
@@ -359,7 +357,7 @@ sub for_path {
     return $self->search({ path => $path });
 }
 
-=item B<for_site>
+=head2 for_site
 
 Find URLS for the given site.
 
@@ -369,6 +367,27 @@ sub for_site {
     my ($self, $site) = @_;
 
     return $self->search({ site_id => $site->id });
+}
+
+=head2 pending_revisions_by_user
+
+=cut
+
+sub pending_revisions_by_user {
+    my ($self, $userid) = @_;
+
+    return $self->search(
+        {
+            'status.name' => 'In Progress',
+            'revisions.active' => 1,
+            'me.user_id' => $userid
+        }, {
+            join => { 'revisions' => 'status' },
+            group_by => 'me.id',
+            '+select' => [ \'COUNT(*) AS rev_count' ],
+            '+as' => 'rev_count'
+        }
+    );
 }
 
 =head1 SEE ALSO
