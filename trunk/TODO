@@ -1,2 +1,4 @@
 * Normalize errors as message->error / message->success
-* URL in Site, for linking 
+* URL in Site, for linking
+* parameter validation for page editing / adding wrt moose requiredness
+* Fix changeset create

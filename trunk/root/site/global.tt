@@ -50,7 +50,7 @@ MACRO input_select(info) BLOCK %]
 [% IF info.url %]
  <span><a href="[% info.url %]">[% info.value %]</a></span>
 [% ELSE %]
- <span>[% info.value %]</span>[% IF info.extra %]
+ <span>[% info.value %]</span>
 [% END %]
 </label>
 [% END %]

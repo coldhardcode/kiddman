@@ -23,27 +23,27 @@ sub add : Local {
 
     $c->stash->{template} = 'changeset/add.tt';
 
-    my $onrevs = $c->req->params->{'revision'};
+    my $onrevs = $c->req->params->{'url'};
     if(!defined($onrevs) || (ref($onrevs) ne 'HASH')) {
-        $c->stash->{message}->{error} = 'No revisions provided.';
+        $c->stash->{message}->{error} = $c->loc('No URLs provided.');
         return;
     }
 
-    my @revs;
-    foreach my $rev (keys(%{ $c->req->params->{'revision'} })) {
-        $rev =~ s/^R//;
-        push(@revs, $rev);
+    my @urls;
+    foreach my $url (keys(%{ $c->req->params->{'url'} })) {
+        $url =~ s/^U//;
+        push(@urls, $url);
     }
 
-    unless(scalar(@revs)) {
-        $c->stash->{message}->{error} = 'No revisions provided.';
+    unless(scalar(@urls)) {
+        $c->stash->{message}->{error} = $c->loc('No URLs provided.');
         return;
     }
 
-    my $revrs = $c->model('RW')->resultset('Revision')->active->pending->for_user('gphat')->search({
-        'me.id' => { '-in' => \@revs }
+    my $urlrs = $c->model('RW')->resultset('URL')->search({
+        'me.id' => { '-in' => \@urls }
     });
-    $c->stash->{revisions} = [ $revrs->all ];
+    $c->stash->{urls} = [ $urlrs->pending_revisions_by_user('gphat')->all ];
 }
 
 =head2 apply
