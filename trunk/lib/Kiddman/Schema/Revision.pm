@@ -161,7 +161,6 @@ sub apply {
     if($op->name eq 'Change') {
 
         $url->options($self->options);
-        $url->version($self->id);
     } elsif($op->name eq 'Activate') {
         if($url->active) {
             die('URL already active.');
@@ -176,6 +175,7 @@ sub apply {
 
     if(!$test) {
         my $apply = sub {
+            $url->version($self->id);
             $url->update;
             $self->update({ status => $appstatus });
         };
@@ -207,6 +207,23 @@ Date this revision was created.
 =item B<id>
 
 Id of this revision.
+
+=head2 is_stale
+
+Returns a true value if this revision is "stale", meaning it is older than the
+current version of the URL it applies to.
+
+=cut
+
+sub is_stale {
+    my ($self) = @_;
+
+    # Catch unversioned urls
+    if(!defined($self->url->version)) {
+        return 0;
+    }
+    return ($self->id <= $self->url->version);
+}
 
 =item B<op>
 

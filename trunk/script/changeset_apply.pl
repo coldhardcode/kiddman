@@ -43,7 +43,7 @@ if(!$ignore_date && !(defined($cs->date_to_publish) && ($now > $cs->date_to_publ
     die('ChangeSet id '.$csid.' is not ready to be published, refusing to apply.');
 }
 
-#$cs->apply;
+$cs->apply;
 
 sub usage {
     print "\nApplies a changeset.\n";

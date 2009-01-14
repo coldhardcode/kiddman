@@ -7,10 +7,17 @@
   [% readonly_binary_field(label => 'Applied', value => changeset.applied) %]
  </fieldset>
 </form>
+<h2>[% c.loc('Revisions') %]</h2>
 <ul class="revlist">
-[% FOREACH rev = changeset.revisions %]
- <li>[% c.loc('Revision [_1]:', rev.id) %] <b>[% rev.op.name %]</b> [% rev.url.path %]</li>
-  <p>[% rev.options %]</p>
- </li>
+[% SET revs = changeset.revisions_ordered_by_site %]
+[% FOREACH rev = revs %]
+ [% IF rev.url.site_id != site %]
+  [% IF site %]</li></ul>[% END %]
+  <li><a href="[% c.action_uri('Site', 'show', [ rev.url.site_id ]) %]">[% rev.url.site.name %]</a>
+   <ul>
+  [% site = rev.url.site_id %]
+ [% END %]
+ <li>[% c.loc('Revision [_1]:', rev.id) %] <b>[% rev.op.name %]</b> <a href="[% c.action_uri('Site::URL', 'show', [ rev.url.site_id, rev.url.id ]) %]">[% rev.url.path %]</a></li>
 [% END %]
+ </li></ul>
 </ul>

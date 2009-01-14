@@ -7,7 +7,7 @@ use KiddmanTest;
 
 BEGIN {
     eval "use DBD::SQLite";
-    plan $@ ? (skip_all => 'Needs DBD::SQLite for testing') : ( tests => 12);
+    plan $@ ? (skip_all => 'Needs DBD::SQLite for testing') : ( tests => 15);
 }
 
 my $schema = KiddmanTest->init_schema();
@@ -56,6 +56,8 @@ cmp_ok($unaprs->count, '==', 2, '2 unapplied revisions');
 
 $rev->update({ status => $status_pending });
 
+ok(!$rev->is_stale, 'revision is not stale (unversioned url)');
+
 my $ret = $rev->apply;
 cmp_ok($ret, '==', 1, 'revision applied');
 $url->discard_changes;
@@ -66,7 +68,13 @@ cmp_ok($unaprs->count, '==', 1, '1 unapplied revisions');
 
 $rev3->update({ status => $status_pending });
 
+ok($rev->is_stale, 'original revision now stale');
+
 eval {
     $rev3->apply;
 };
 ok($@ =~ /^Version mismatch: Rev:none/, 'rev3 version mismatch');
+
+ok(!$rev3->is_stale, 'new revision is not stale');
+
+

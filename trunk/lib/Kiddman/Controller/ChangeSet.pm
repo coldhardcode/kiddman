@@ -162,6 +162,10 @@ sub item_base : Chained('/') PathPart('changeset') CaptureArgs(1) {
 sub show : Chained('item_base') PathPart('') Args(0) {
     my ($self, $c, $id) = @_;
 
+    if($c->stash->{context}->{changeset}->is_stale) {
+        $c->stash->{message}->{warning} = $c->loc('This ChangeSet is stale.');
+    }
+
     $c->stash->{template} = 'changeset/show.tt';
 }
 

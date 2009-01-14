@@ -9,7 +9,7 @@
 <h2>[% c.loc('Pending ChangeSets') %]</h2>
 <ul>
  [% FOREACH cs = pending_changesets %]
- <li><a href="[% c.action_uri('ChangeSet', 'show', [ cs.id ]) %]">[% cs.id %]</a> <a href="[% c.action_uri('ChangeSet', 'confirm', [ cs.id ]) %]">Apply</a></li>
+ <li><a href="[% c.action_uri('ChangeSet', 'show', [ cs.id ]) %]">[% cs.id %]</a> [% IF cs.is_stale %]Stale[% ELSE %]<a href="[% c.action_uri('ChangeSet', 'confirm', [ cs.id ]) %]">Apply</a></li>[% END %]
  [% END %]
 </ul>
 <h2>[% c.loc('In Progress Revisions') %]</h2>

@@ -36,17 +36,19 @@
 
 [% SET tree = context.site.get_url_tree %]
 
-<div style="background-color: white">
-<a href="[% c.action_uri('Site', 'show', [ context.site.id ]) %]">[% context.site.name %]</a>
-<div id="markup">
-[% SET nodes = tree.getAllChildren %]
- <ul>
-[% FOREACH node = nodes %]
-  [% make_branch(node, 1) %]
+[% IF context.site %]
+<div id="sitemap">
+ <a href="[% c.action_uri('Site', 'show', [ context.site.id ]) %]">[% context.site.name %]</a>
+ <div id="markup">
+  [% SET nodes = tree.getAllChildren %]
+  <ul>
+  [% FOREACH node = nodes %]
+   [% make_branch(node, 1) %]
+  [% END %]
+  </ul>
+ </div>
+</div>
 [% END %]
- </ul>
-</div>
-</div>
 
 <script language="javascript">
 function makeTree() {

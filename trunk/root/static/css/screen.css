@@ -290,3 +290,7 @@ div.pager a:hover {
     background-color: #3470a9;
     color: #fff;
 }
+#sitemap {
+    background-color: #fff;
+    padding: 5px;
+}

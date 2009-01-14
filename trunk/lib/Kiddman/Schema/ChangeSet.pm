@@ -144,6 +144,25 @@ The date this changeset is to be applied.  Used for delaying publishing.
 
 This changesets's id.
 
+=head2 is_stale
+
+Returns true if B<any> of the revisions in this changeset are stale.
+
+=cut
+
+sub is_stale {
+    my ($self) = @_;
+
+    my $revs = $self->revisions;
+    while(my $rev = $revs->next) {
+        if($rev->is_stale) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 =head2 publisher_id
 
 User that published this changeset.
@@ -157,6 +176,19 @@ sub revision_count {
     my ($self) = @_;
 
     return $self->revisions->count;
+}
+
+=head2 revisions_ordered_by_site
+
+Convenience method primarily provided for using with TT, since wantarray is the
+devil.  Returns this ChangeSet's revisions ordered by Site.
+
+=cut
+
+sub revisions_ordered_by_site {
+    my ($self) = @_;
+
+    return $self->revisions->search(undef, { join => 'url', order_by => 'url.site_id' });
 }
 
 =head2 revisions
