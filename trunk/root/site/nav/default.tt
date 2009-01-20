@@ -12,8 +12,6 @@
   [% END %]
   [% input_select({ label => 'Site', value => context.site.id, array => sites, name => 'site', empty_option => empty, onchange => 'KIDDMAN.redirectToSiteId(this.selectedIndex)' }) %]
  </form>
-[% page.head.stylesheets.push('treeview.css') %]
-
 [% MACRO make_branch(node) BLOCK;
 
   IF node.isLeaf;

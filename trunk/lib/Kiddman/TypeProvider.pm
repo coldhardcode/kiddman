@@ -3,9 +3,10 @@ use Moose::Role;
 
 use Template;
 
-has 'input_type' => (
-    is => 'rw',
-    isa => ''
+has 'value_accessor' => (
+    is => 'ro',
+    isa => 'Str',
+    default => sub { 'id' }
 );
 
 requires 'get_values';

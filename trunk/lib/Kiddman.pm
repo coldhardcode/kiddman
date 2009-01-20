@@ -83,10 +83,10 @@ type.  Returns an instance of the type provider if one exists, else undef.
 sub get_provider {
     my ($self, $type) = @_;
 
-    if(defined($self->config->{types} && defined($self->config->{types}->{$type}))) {
+    if(defined($self->config->{TypeProvider}) && defined($self->config->{TypeProvider}->{$type})) {
         my $provider = undef;
         eval {
-            my $provname = $self->config->{types}->{$type};
+            my $provname = $self->config->{TypeProvider}->{$type};
             Class::MOP::load_class($provname);
             $provider = $provname->new;
         };
@@ -97,6 +97,8 @@ sub get_provider {
 
         return $provider;
     }
+
+    return undef;
 }
 
 =back

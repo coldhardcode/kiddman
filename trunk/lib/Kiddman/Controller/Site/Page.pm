@@ -21,7 +21,7 @@ Catalyst Controller.
 sub item_base : Chained('/site/item_base') PathPart('page') CaptureArgs(1) {
 	my ($self, $c, $id) = @_;
 
-	my $page = $c->model('Page')->search({
+	my $page = $c->model('RW::Page')->search({
 		site_id => $c->stash->{context}->{site}->id,
 		id => $id
 	})->single;

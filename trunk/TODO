@@ -2,3 +2,4 @@
 * URL in Site, for linking
 * parameter validation for page editing / adding wrt moose requiredness
 * Rename changeset's applied to published, since all the dates are published
+* Add "external" column to Site for use with outside stuff...

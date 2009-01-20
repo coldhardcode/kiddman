@@ -1,1 +1,1 @@
-<textarea rows="5" cols="30" name="options.[% attr.name %]">[% attr.value %]</textarea>
+<textarea rows="5" cols="30" name="options.[% opts.name %]">[% opts.value %]</textarea>

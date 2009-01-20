@@ -37,13 +37,13 @@ DEFAULT page.body.classes     = [];
 DEFAULT page.body.scripts     = [];
 DEFAULT page.content_class    = 'content';
 
-page.head.stylesheets.push('reset-fonts-grids.css');
+page.head.stylesheets.push('http://ajax.googleapis.com/ajax/libs/yui/2.6.0/build/reset-fonts-grids/reset-fonts-grids.css');
 page.head.stylesheets.push('screen.css');
-page.head.stylesheets.push('treeview.css');
+page.head.stylesheets.push('http://ajax.googleapis.com/ajax/libs/yui/2.6.0/build/treeview/assets/skins/sam/treeview.css');
 
-page.head.scripts.push('yahoo-dom-event.js');
-page.head.scripts.push('treeview-min.js');
-page.head.scripts.push('connection-min.js');
+page.head.scripts.push('http://ajax.googleapis.com/ajax/libs/yui/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js');
+page.head.scripts.push('http://ajax.googleapis.com/ajax/libs/yui/2.6.0/build/treeview/treeview-min.js');
+page.head.scripts.push('http://ajax.googleapis.com/ajax/libs/yui/2.6.0/build/connection/connection-min.js');
 page.head.scripts.push('common.js');
 
 # Include global macros/vars/set up per implementation

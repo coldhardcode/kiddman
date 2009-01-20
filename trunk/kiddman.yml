@@ -30,3 +30,9 @@ Plugin::Authentication:
                         password: test
                         roles:
                             - Editor
+TypeMap:
+    Str: types/str.tt
+    Kiddman::Client::Types::LongStr: types/longstr.tt
+    "Greenspan::Hadleigh::Page::SingleSet::SetId": types/array.tt
+TypeProvider:
+    "Greenspan::Hadleigh::Page::SingleSet::SetId": Greenspan::Hadleigh::Page::SetProvider

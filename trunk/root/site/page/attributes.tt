@@ -1,9 +1,3 @@
-[%
-  typemap = {
-    'Str' => 'types/str.tt',
-    'Kiddman::Client::Types::LongStr' => 'types/longstr.tt'
-  }
-%]
 <h2>Page Attributes</h2>
 [% SET attributes = meta.get_attribute_map %]
 [% FOREACH attr = attributes.keys %]
@@ -11,7 +5,17 @@
 [% IF attributes.$attr.has_label %]
   [% SET type = attributes.$attr.type_constraint.name %]
   <label><em>[% attributes.$attr.label %]: </em><span>
-    [% INCLUDE "${typemap.$type}" attr = { 'name' => attr, 'value' => instance.$attr } %]
+    [% IF c.config.TypeMap.exists(type) %]
+     [% SET argref = { 'name' => attr, 'value' => instance.$attr } %]
+     [% provider = c.get_provider(type) %]
+     [% IF provider %]
+      [% argref.values = provider.get_values %]
+      [% argref.val_accessor = provider.value_accessor %]
+     [% END %]
+     [% INCLUDE "${c.config.TypeMap.$type}" opts = argref %]
+    [% ELSE %]
+     Unknown Type: [% type %]
+    [% END %]
   </span>
  </label>
 [% END %]

@@ -1,1 +1,1 @@
-<input type="text" name="options.[% attr.name %]" value="[% attr.value %]">
+<input type="text" name="options.[% opts.name %]" value="[% opts.value %]">
