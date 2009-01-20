@@ -54,7 +54,7 @@ sub create : Local {
 	$c->response->body('Redirect');
 }
 
-=item B<fetch_url>
+=head2 fetch_url
 
 Retrieve a url for the current site with the given path.
 

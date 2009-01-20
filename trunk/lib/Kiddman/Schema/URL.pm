@@ -110,23 +110,23 @@ __PACKAGE__->has_many('revisions' => 'Kiddman::Schema::Revision', 'url_id');
 
 =over 4
 
-=item B<active>
+=head2 active
 
 Active flag.
 
-=item B<date_created>
+=head2 date_created
 
 Date this URL was created.
 
-=item B<date_last_modified>
+=head2 date_last_modified
 
 Date this URL was last modified.
 
-=item B<description>
+=head2 description
 
 Description of this URL.
 
-=item B<file>
+=head2 file
 
 Returns the final "element" in the path, which I am haphazardly referring to as the
 'file' portion.  A path of '/foo/bar/baz' will return 'baz'.
@@ -139,11 +139,11 @@ sub file {
     return $parts[$#parts];
 }
 
-=item B<id>
+=head2 id
 
 Id of URL.
 
-=item B<is_leaf>
+=head2 is_leaf
 
 Provided to make working with the L<Site|Kiddman::Site>'s C<get_entry_arrayref>
 easier, as nodes can be tested for leaf status.  Returns true.
@@ -153,7 +153,7 @@ sub is_leaf {
     return 1;
 }
 
-=item B<make_new>
+=head2 make_new
 
 Convenience method that creates a new URL and an accompanying 'Pending'
 Revision that is in 'In Progress', all inside of a transaction.  Returns
@@ -199,24 +199,24 @@ sub make_new {
     return $rev;
 }
 
-=item B<options>
+=head2 options
 
 Options for this revision.  Stored as YAML but automatically inflated and
 deflated using L<YAML::XS>.
 
-=item B<page>
+=heda2 page
 
 Page this used at this URL.
 
-=item B<page_id>
+=head2 page_id
 
 Id of Page this used at this URL.
 
-=item B<path>
+=head2 path
 
 Path of this URL.
 
-=item B<revise($user, $options)>
+=head2 revise($user, $options)
 
 Creates a revision from this URL or modifies any extant unapplied revisions by this user
 to have the specified options.  The new Revision will have a version number
@@ -301,23 +301,23 @@ sub revise_for_user {
     }
 }
 
-=item B<site>
+=head2 site
 
 Site this URL belongs to.
 
-=item B<site_id>
+=head2 site_id
 
 Id of Site this URL belongs to.
 
-=item B<user>
+=head2 user
 
 User that created this URL.
 
-=item B<user_id>
+=head2 user_id
 
 Id of User that created this URL.
 
-=item B<version>
+=head2 version
 
 Version of this URL.  The version is the id of the last revision applied to
 the URL.  This protects from applying revisions that were created from older

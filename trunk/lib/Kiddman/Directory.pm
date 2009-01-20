@@ -9,7 +9,7 @@ has 'name' => (
     'required'  => 1
 );
 
-=item B<is_leaf>
+=head2 is_leaf
 
 Provided to make working with the L<Site|Kiddman::Site>'s C<get_entry_arrayref>
 easier, as nodes can be tested for leaf status.  Returns false.

@@ -69,13 +69,11 @@ __PACKAGE__->has_many('urls' => 'Kiddman::Schema::URL', 'site_id');
 
 =head1 METHODS
 
-=over 4
-
-=item B<active>
+=head2 active
 
 Active flag.
 
-=item B<apply_changeset>
+=head2 apply_changeset
 
 Apply the supplied changeset to this Site.
 
@@ -102,11 +100,11 @@ sub apply_changeset {
     return $count;
 }
 
-=item B<date_created>
+=head2 date_created
 
 Date this site was created.
 
-=item B<get_url_arrayref>
+=head2 get_url_arrayref
 
 Returns an arrayref, wherein the 'directory structure' of the urls is
 represented as an arrayref.
@@ -125,7 +123,7 @@ sub get_url_arrayref {
     return $array;
 }
 
-=item B<get_url_tree>
+=head2 get_url_tree
 
 Returns an Tree::Simple object, wherein the 'directory structure' of the urls is
 represented with leaf nodes as L<Kiddman::Schema::Page> objects and non-leaf nodes
@@ -157,15 +155,15 @@ sub get_url_tree {
     return $tree;
 }
 
-=item B<id>
+=head2 id
 
 Id of this site.
 
-=item B<name>
+=head2 name
 
 Name of this site.
 
-=item B<ttl>
+=head2 ttl
 
 Time to live (in seconds) for this site.  Used by actual site implementation
 for caching.

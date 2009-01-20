@@ -47,15 +47,15 @@ __PACKAGE__->has_many('revisions' => 'Kiddman::Schema::Revision', 'op_id');
 
 =over 4
 
-=item B<id>
+=head2 id
 
 Op id.
 
-=item B<name>
+=head2 name
 
 Name of op.
 
-=item B<revisions>
+=head2 revisions
 
 Revisions of this op type.
 

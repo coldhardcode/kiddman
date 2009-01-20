@@ -98,9 +98,7 @@ __PACKAGE__->belongs_to('url' => 'Kiddman::Schema::URL', 'url_id');
 
 =head1 METHODS
 
-=over 4
-
-=item B<active>
+=head2 active
 
 Active flag.
 
@@ -192,19 +190,19 @@ sub apply {
     return 1;
 }
 
-=item B<changeset>
+=head2 changeset
 
 Changeset this revision belongs to.
 
-=item B<changeset>
+=head2 changeset
 
 ID of Changeset this revision belongs to.
 
-=item B<date_created>
+=head2 date_created
 
 Date this revision was created.
 
-=item B<id>
+=head2 id
 
 Id of this revision.
 
@@ -225,40 +223,40 @@ sub is_stale {
     return ($self->id <= $self->url->version);
 }
 
-=item B<op>
+=head2 op
 
 Type of op this revision represents.
 
-=item B<op>
+=head2 op_id
 
 ID of Type of op this revision represents.
 
-=item B<options>
+=head2 options
 
 Options for this revision.  Stored as YAML but automatically inflated and
 deflated using L<YAML::XS>.
 
-=item B<status>
+=head2 status
 
 Status of this revision.
 
-=item B<status_id>
+=head2 status_id
 
 ID of status of this revision.
 
-=item B<url>
+=head2 url
 
 URL this is a revision of.
 
-=item B<url_id>
+=head2 url_id
 
 ID of URL this is a revision of.
 
-=item B<user_id>
+=head2 user_id
 
 User id that created this Revision.
 
-=item B<version>
+=head2 version
 
 Version of URL at the time this revision was created.  Protects "old"
 revisions from being applied to URLs.
@@ -275,7 +273,7 @@ use base 'DBIx::Class::ResultSet';
 
 =over 4
 
-=item B<active>
+=head2 active
 
 Finds active revisions.
 
@@ -302,7 +300,7 @@ sub by_date {
     return $self->search(undef, { order_by => \"date_created $dir"});
 }
 
-=item B<for_url>
+=head2 for_url
 
 Finds revisions for the given url object.
 
@@ -314,7 +312,7 @@ sub for_url {
     return $self->search({ url_id => $url->id });
 }
 
-=item B<for_user>
+=head2 for_user
 
 Finds revisions for the given user_id.
 
@@ -326,7 +324,7 @@ sub for_user {
     return $self->search({ user_id => $user });
 }
 
-=item B<op>
+=head2 op
 
 Finds revisions for the given op object.
 
@@ -338,7 +336,7 @@ sub op {
     return $self->search({ op_id => $op->id });
 }
 
-=item B<pending>
+=head2 pending
 
 Finds revisions that have not been applied.
     

@@ -21,7 +21,7 @@ A URL in Kiddman is a path, like "/foo/bar" plus a page.
 
 =head2 Pages
 
-A Page is a class.  The class must extend L<Kiddman::Page>.  Using the power
+A Page is a class.  The class must extend L<Kiddman::Client::Page>.  Using the power
 of L<Moose> (which is the enabler of all the magic Kiddman does) the
 attributes of the page can be discovered and end users merely set the values
 to influence the rendering of the page.

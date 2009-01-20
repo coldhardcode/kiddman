@@ -76,37 +76,33 @@ __PACKAGE__->belongs_to('site' => 'Kiddman::Schema::Site', 'site_id');
 
 =head1 METHODS
 
-=over 4
-
-=item B<active>
+=head2 active
 
 Active flag.
 
-=item B<class>
+=head2 class
 
 Class name that implements this page.
 
-=item B<date_created>
+=head2 date_created
 
 Date this page was created.
 
-=item B<id>
+=head2 id
 
 Page id.
 
-=item B<name>
+=head2 name
 
 Name of page.
 
-=item B<site>
+=head2 site
 
 Site this page belongs to.
 
-=item B<site_id>
+=head2 site_id
 
 ID of site this page belongs to.
-
-=back
 
 =head1 SEE ALSO
 

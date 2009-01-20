@@ -47,9 +47,7 @@ __PACKAGE__->setup(qw/
 
 =head1 ACTIONS
 
-=over 4
-
-=item B<action_uri>
+=head2 action_uri
 
 Convenience method for linking to chained actions.
 
@@ -59,7 +57,7 @@ sub action_uri {
     return $c->uri_for($c->controller($controller)->action_for($action), @params);
 }
 
-=item B<form_is_valid>
+=head2 form_is_valid
 
 Convenience method validating forms.
 
@@ -74,7 +72,7 @@ sub form_is_valid {
     return 1;
 }
 
-=item B<get_provider>
+=head2 get_provider
 
 Checks Kiddman's configuration options for a type provider for the given
 type.  Returns an instance of the type provider if one exists, else undef.
@@ -105,7 +103,7 @@ sub get_provider {
 
 =head1 SEE ALSO
 
-L<Kiddman::Controller::Root>, L<Catalyst>
+L<Kiddman::Controller::Root>, L<Catalyst>, L<Kiddman::Client>
 
 =head1 AUTHOR
 
