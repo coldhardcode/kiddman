@@ -50,7 +50,7 @@ sub index : Chained('base') PathPart('') Args(0) {
     my $status = $schema->resultset('Status');
 
     my $urls = $schema->resultset('URL')->pending_url_revisions_by_user('gphat');
-    $c->stash->{urls} = [ $urls->all ];
+    $c->stash->{in_progress_urls} = [ $urls->all ];
 
     my $cs_rs = $schema->resultset('ChangeSet');
 

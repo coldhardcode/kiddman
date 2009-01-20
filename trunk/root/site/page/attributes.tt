@@ -1,16 +1,17 @@
 <h2>Page Attributes</h2>
-[% SET attributes = meta.get_attribute_map %]
-[% FOREACH attr = attributes.keys %]
+[% SET attributes = meta.get_all_attributes %]
+[% FOREACH attr = attributes %]
 
-[% IF attributes.$attr.has_label %]
-  [% SET type = attributes.$attr.type_constraint.name %]
-  <label><em>[% attributes.$attr.label %]: </em><span>
+[% IF attr.has_label %]
+  [% SET type = attr.type_constraint.name %]
+  <label><em>[% attr.label %]: </em><span>
     [% IF c.config.TypeMap.exists(type) %]
-     [% SET argref = { 'name' => attr, 'value' => instance.$attr } %]
+     [% SET argref = { 'name' => attr.name, 'value' => instance.${attr.name} } %]
      [% provider = c.get_provider(type) %]
      [% IF provider %]
       [% argref.values = provider.get_values %]
       [% argref.val_accessor = provider.value_accessor %]
+      [% provider.override_type %]
      [% END %]
      [% INCLUDE "${c.config.TypeMap.$type}" opts = argref %]
     [% ELSE %]
