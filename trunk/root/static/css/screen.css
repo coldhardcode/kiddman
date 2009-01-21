@@ -129,6 +129,7 @@ fieldset {
     border: 1px solid #ddd;
     margin: 0 0 1em 0;
     padding: 1em 0 1em 0;
+    position: relative;
 }
 fieldset h2 {
     margin: 0 0 1em 2em;
@@ -146,6 +147,17 @@ fieldset label.error {
 fieldset label span {
     float: left;
 }
+div.expl {
+    left: auto;
+    position: absolute;
+    right: 0.4em;
+    top: 1.5em;
+}
+span.req {
+    color: #b31d1c;
+    float: none;
+    font-weight: bold;
+}
 fieldset label em {
     clear: left;
     display: block;
@@ -154,6 +166,9 @@ fieldset label em {
     padding: 0 7px 1em 5px;
     text-align: right;
     width: 15em;
+}
+fieldset label em.req {
+    text-transform: uppercase;
 }
 fieldset input,
 fieldset select,

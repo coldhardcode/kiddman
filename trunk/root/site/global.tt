@@ -19,7 +19,7 @@ END ~%]
 
 [%~
 MACRO input_select(info) BLOCK %]
-<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %]: </em>
+<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %][% IF info.required %]<span class="req">*</span>[% END %]: </em>
  <select name="[% info.name %]"[% IF info.onchange %] onchange="[% info.onchange %]"[% END %]>
   [% IF info.empty_option %]
   <option value="">[% c.loc('Choose One') %]</option>
@@ -37,16 +37,16 @@ MACRO input_select(info) BLOCK %]
 </label>
 [% END ~%]
 [%~ MACRO input_checkbox(info) BLOCK %]
-<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %]: </em><input type="checkbox" name="[% info.name %]" [% IF info.value %]checked="checked"[% END %]></label>
+<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %][% IF info.required %]<span class="req">*</span>[% END %]: </em><input type="checkbox" name="[% info.name %]" [% IF info.value %]checked="checked"[% END %]></label>
 [% END ~%]
 [%~ MACRO input_text(info) BLOCK %]
-<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %]: </em><input type="text" name="[% info.name %]" value="[% info.value %]"></label>
+<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %][% IF info.required %]<span class="req">*</span>[% END %]: </em><input type="text" name="[% info.name %]" value="[% info.value %]"></label>
 [% END ~%]
 [%~ MACRO input_textarea(info) BLOCK %]
-<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %]: </em><textarea name="[% info.name %]">[% info.value %]</textarea>
+<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %][% IF info.required %]<span class="req">*</span>[% END %]: </em><textarea name="[% info.name %]">[% info.value %]</textarea>
 [% END ~%]
 [%~ MACRO input_password(info) BLOCK %]
-<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %]: </em><input type="password" name="[% info.name %]" value="[% info.value %]"></label>
+<label class="[% form_field_status(info.name) %]"><em>[% c.loc(info.label) %][% IF info.required %]<span class="req">*</span>[% END %]: </em><input type="password" name="[% info.name %]" value="[% info.value %]"></label>
 [% END ~%]
 [%~ MACRO readonly_field(info) BLOCK %]
 <label><em>[% c.loc(info.label) %]: </em>

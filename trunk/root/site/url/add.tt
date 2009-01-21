@@ -1,9 +1,10 @@
 <h1>[% c.loc('Add URL to Site: [_1]', context.site.name) %]</h1>
 <form method="POST" action="[% c.action_uri('Site::URL', 'create', [ context.site.id ]) %]">
  <fieldset>
-  [% input_select({ label => 'Page', name => 'page', array => pages, value_method => 'id', value => url.page_id, empty_option => 1, onchange => "KIDDMAN.getPageAttributes(" _ context.site.id _ ", this.selectedIndex, 'attributes')" }) %]
-  [% input_text({ label => 'Description', name => 'description', value => url.description }) %]
-  [% input_text({ label => 'Path', name => 'path', value => url.path }) %]
+  <div class="expl"><span class="req">*</span> Denotes required field.</div>
+  [% input_select({ label => 'Page', required => 1, name => 'page', array => pages, value_method => 'id', value => url.page_id, empty_option => 1, onchange => "KIDDMAN.getPageAttributes(" _ context.site.id _ ", this.selectedIndex, 'attributes')" }) %]
+  [% input_text({ label => 'Description', required => 1, name => 'description', value => url.description }) %]
+  [% input_text({ label => 'Path', required => 1, name => 'path', value => url.path }) %]
   <div id="attributes" style="float: left; clear: both">
   </div>
   <div class="submit">

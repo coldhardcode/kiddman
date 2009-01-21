@@ -86,7 +86,8 @@
  <form>
   <fieldset>
    <legend>Legend 1</legend>
-   <label><em>Field1:</em><input type="text"></label>
+   <div class="expl"><span class="req">*</span> Denotes required field.</div>
+   <label><em>Field1<span class="req">*</span>:</em><input type="text"></label>
    <label><em>Field Deux:</em><input type="text"></label>
    <label><em>Select Box:</em>
     <select>

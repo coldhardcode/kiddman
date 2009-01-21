@@ -4,7 +4,7 @@
 
 [% IF attr.has_label %]
   [% SET type = attr.type_constraint.name %]
-  <label><em>[% attr.label %]: </em><span>
+  <label><em>[% attr.label %][% IF attr.is_required %]<span class="req">*</span>[% END %]: </em><span>
     [% IF c.config.TypeMap.exists(type) %]
      [% SET argref = { 'name' => attr.name, 'value' => instance.${attr.name} } %]
      [% provider = c.get_provider(type) %]

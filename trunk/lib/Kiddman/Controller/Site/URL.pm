@@ -45,8 +45,24 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
         path => $c->req->params->{'path'} || undef,
         user_id => 'gphat'
     });
+    $c->stash->{url} = $url;
 
-    $c->form(required => [qw(page path description)]);
+    my $required = [qw(page path description)];
+
+    my $page = $c->model('RW::Page')->find($c->req->params->{page});
+    unless(defined($page)) {
+        $c->stash->{message}->{fail} = $c->localize('Unknown Page.');
+        $c->detach('add');
+    }
+    # XXX Eval protection!
+    Class::MOP::load_class($page->class);
+    my @attrs = $page->class->meta->get_all_attributes;
+    foreach my $attr (@attrs) {
+        push(@{ $required }, $attr->name);
+    }
+
+    $c->form(required => $required);
+
     unless($c->form_is_valid) {
         $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors.');
         $c->detach('add');
@@ -71,10 +87,10 @@ sub edit : Chained('item_base') PathPart('edit') Args(0) {
     $url->revise_for_user('gphat');
 
     my $revcount = $c->model('RW')->resultset('Revision')->pending->for_user('gphat')->for_url($url)->by_date->count;
-	if($revcount) {
-		$c->stash->{message}->{'warning'} = $c->loc('Current view is affected by [_1] uncommitted changes.', $revcount);
-	}
-	$c->stash->{revcount} = $revcount;
+    if($revcount) {
+        $c->stash->{message}->{'warning'} = $c->loc('Current view is affected by [_1] uncommitted changes.', $revcount);
+    }
+    $c->stash->{revcount} = $revcount;
 
     # XXX Nead some eval protection here
     Class::MOP::load_class($url->page->class);
@@ -92,7 +108,7 @@ sub item_base : Chained('/site/item_base') PathPart('url') CaptureArgs(1) {
     my $url = $c->model('RW')->resultset('URL')->find($id);
 
     unless(defined($url)) {
-        $c->stash->{message} = 'Unknown URL.';
+        $c->stash->{message} = $c->loc('Unknown URL.');
         $c->detach('/util/not_found');
     }
 
@@ -104,24 +120,24 @@ sub save : Chained('item_base') PathPart('save') Args(0) {
 
     my $url = $c->stash->{context}->{url};
     my $act = defined($c->req->params->{active}) ? 1 : 0;
-	my $opts = $c->req->params->{options} || undef;
+    my $opts = $c->req->params->{options} || undef;
 
     #XXX Validation
-    # $c->form(required => [qw(description)]);
-    # unless($c->form_is_valid) {
-        # $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors');
-        # $c->detach('add');
-    # }
+    $c->form(required => [qw(description)]);
+    unless($c->form_is_valid) {
+        $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors');
+        $c->detach('add');
+    }
 
-	my $revs = $url->revise('gphat', $act, $opts);
+    my $revs = $url->revise('gphat', $act, $opts);
 
-	if(scalar(@{ $revs })) {
-    	$c->stash->{message}->{success} = $c->localize('Revision(s) added successfully.', scalar(@{ $revs }));
-	} else {
-    	$c->stash->{message}->{warning} = $c->localize('No Revisions added.');
-	}
+    if(scalar(@{ $revs })) {
+        $c->stash->{message}->{success} = $c->localize('Revision(s) added successfully.', scalar(@{ $revs }));
+    } else {
+        $c->stash->{message}->{warning} = $c->localize('No Revisions added.');
+    }
     $c->response->redirect($c->action_uri('Site::URL', 'show', [ $url->site_id, $url->id ]), 303);
-	$c->response->body('Redirect');
+    $c->response->body('Redirect');
 }
 
 sub show : Chained('item_base') PathPart('show') Args(0) {
@@ -134,7 +150,6 @@ sub show : Chained('item_base') PathPart('show') Args(0) {
         $c->stash->{message}->{'warning'} = $c->loc('You have [_1] uncommitted changes for this URL.', $revcount);
         # Pass a production version of this URL to the controller.
         $c->stash->{original_url} = $c->model('RW')->resultset('URL')->find($url->id);
-
     }
 
     # XXX Nead some eval protection here
