@@ -1,6 +1,6 @@
 [% SET site = context.site %]
 <h1>[% c.loc('Site Details') %]</h1>
-<a href="[% c.action_uri('Site::URL', 'add', [ site.id ]) %]">[% c.loc('Add Page') %]</a>
+<a href="[% c.action_uri('Site::URL', 'add', [ site.id ]) %]">[% c.loc('Add URL') %]</a>
 <form>
  <fieldset>
    [% readonly_field({ label => c.loc('ID'), value => site.id }) %]
