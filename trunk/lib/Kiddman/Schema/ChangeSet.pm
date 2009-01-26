@@ -188,7 +188,10 @@ devil.  Returns this ChangeSet's revisions ordered by Site.
 sub revisions_ordered_by_site {
     my ($self) = @_;
 
-    return $self->revisions->search(undef, { join => 'url', order_by => 'url.site_id' });
+    return $self->revisions->search(
+        { 'me.active' => 1 },
+        { join => 'url', order_by => 'url.site_id' }
+    );
 }
 
 =head2 revisions

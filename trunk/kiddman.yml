@@ -34,5 +34,7 @@ TypeMap:
     Str: types/str.tt
     Kiddman::Client::Types::LongStr: types/longstr.tt
     "Greenspan::Hadleigh::Page::SingleSet::SetId": types/array.tt
+    "Greenspan::Hadleigh::Page::SingleSet::Layout": types/array.tt
 TypeProvider:
     "Greenspan::Hadleigh::Page::SingleSet::SetId": Greenspan::Hadleigh::Page::SetProvider
+    "Greenspan::Hadleigh::Page::SingleSet::Layout": Greenspan::Hadleigh::Page::LayoutProvider
