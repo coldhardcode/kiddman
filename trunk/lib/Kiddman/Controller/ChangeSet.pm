@@ -107,7 +107,8 @@ sub create : Local {
     my $makechange = sub {
         $changeset = $schema->resultset('ChangeSet')->create({
             applied => 0,
-            comment => $c->req->params->{'comment'}
+            comment => $c->req->params->{'comment'},
+            active => 1
         });
 
         foreach my $url (@urls) {
