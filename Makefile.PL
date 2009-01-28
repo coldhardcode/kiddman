@@ -23,6 +23,7 @@ requires 'DateTime';
 requires 'DBIx::Class';
 requires 'DBIx::Class::TimeStamp';
 requires 'File::Spec';
+requires 'Text::xSV';
 requires 'JSON::XS';
 requires 'Kiddman::Client';
 requires 'Moose';

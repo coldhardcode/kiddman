@@ -10,13 +10,14 @@ use Getopt::Long;
 
 use Kiddman;
 
-my ( $help, $deploy, $ddl, $drop_tables ) = ( 0, 1, 0, 1 );
+my ( $help, $deploy, $ddl, $drop_tables, $populate ) = ( 0, 1, 0, 1, 0 );
 
 GetOptions(
     'help|?'   => \$help,
     'deploy|d' => \$deploy,
     'ddl'      => \$ddl,
     'drop'     => \$drop_tables,
+    'populate' => \$populate,
 );
 
 pod2usage(1) if $help;
@@ -31,31 +32,24 @@ if ( $ddl ) {
     );
 }
 elsif ( $deploy ) {
-    $schema->deploy({ add_drop_table => $drop_tables });
+    my $options = { 
+        add_drop_table => $drop_tables,
+        import => { 
+            'Op'        => 'data/operations.csv', 
+            'Status'    => 'data/status.csv',
+        },
+    };
 
-    # Ops
-    $schema->resultset('Op')->create({
-        name => 'Activate',
-    });
-    $schema->resultset('Op')->create({
-        name => 'Deactivate'
-    });
-    $schema->resultset('Op')->create({
-        name => 'Change'
-    });
-
-
-    # Statuses
-    $schema->resultset('Status')->create({
-        name => 'In Progress'
-    });
-    $schema->resultset('Status')->create({
-        name => 'Pending',
-    });
-    $schema->resultset('Status')->create({
-        name => 'Applied'
-    });
-
+    if ( $populate ) {
+        $options->{import} = {
+            'Op'        => 'data/operations.csv',
+            'Status'    => 'data/status.csv',
+            'Site'      => 'data/sites.csv', 
+            'Page'      => 'data/pages.csv', 
+            'URL'       => 'data/urls.csv', 
+        };
+    }
+    $schema->deploy($options);
 } else {
     pod2usage(1);
 }
