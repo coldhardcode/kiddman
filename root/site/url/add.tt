@@ -6,6 +6,9 @@
   [% input_text({ label => 'Description', required => 1, name => 'description', value => url.description }) %]
   [% input_text({ label => 'Path', required => 1, name => 'path', value => url.path }) %]
   <div id="attributes" style="float: left; clear: both">
+   [% IF url.page_id %]
+    [% INCLUDE 'site/page/attributes.tt' %]
+   [% END %]
   </div>
   <div class="submit">
    <input type="submit" value="[% c.loc('Submit') %]">

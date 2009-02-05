@@ -54,12 +54,15 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
         $c->stash->{message}->{fail} = $c->localize('Unknown Page.');
         $c->detach('add');
     }
+
     # XXX Eval protection!
     Class::MOP::load_class($page->class);
     my @attrs = $page->class->meta->get_all_attributes;
-    # foreach my $attr (@attrs) {
-    #     push(@{ $required }, $attr->name);
-    # }
+    $c->stash->{meta} = $page->class->meta;
+    $c->stash->{instance} = $page->class->new($url->options);
+    foreach my $attr (@attrs) {
+        push(@{ $required }, $attr->name);
+    }
 
     $c->form(required => $required);
 
