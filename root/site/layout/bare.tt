@@ -5,8 +5,11 @@
    <div id="gmessage" [% UNLESS message.success %]style="display: none"[% END %]>
     <p>[% IF message.success %][% message.success %][% END %]</p>
    </div>
-   <div id="rmessage" [% UNLESS message.fail %]style="display: none"[% END %]>
-    <p>[% IF message.fail %][% message.fail %][% END %]</p>
+   <div id="rmessage" [% UNLESS message.error %]style="display: none"[% END %]>
+    <p>[% IF message.error %][% message.error %][% END %]</p>
+   </div>
+   <div id="omessage" [% UNLESS message.warning %]style="display: none"[% END %]>
+    <p>[% IF message.warning %][% message.warning %][% END %]</p>
    </div>
    <div id="focus">
     [% content %]

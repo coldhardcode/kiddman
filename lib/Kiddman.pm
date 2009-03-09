@@ -18,7 +18,20 @@ Kiddman - Meta-Content Management System
 
 =head1 DESCRIPTION
 
-[enter your description here]
+Kiddman is a Meta-Content Management System.  This concept is likely
+unfamiliar to you because I made it up.  Well, I'm sure I'm not the only
+person to concieve of this solution — quite the contrary — but that's my term
+for it.
+
+In a nutshell, Kiddman manages URLs.  You give it a URL and tell it meta-data
+about that URL.  What is it's title, description, etc.  Kiddman then allows
+retrieval of that information by interested parties.  The interested parties,
+in the common case, is your web application.  If someone requests C</foo/var>
+from your application then your application can ask Kiddman what it should
+show.  This allows you to break off all or some of your application for
+external control.
+
+To learn more about how to implement Kiddman please read L<Kiddman::Tutorial>.
 
 =cut
 

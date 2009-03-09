@@ -51,30 +51,36 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
 
     my $page = $c->model('RW::Page')->find($c->req->params->{page});
     unless(defined($page)) {
-        $c->stash->{message}->{fail} = $c->localize('Unknown Page.');
+        $c->stash->{message}->{error} = $c->localize('Unknown Page.');
         $c->detach('add');
     }
 
     # XXX Eval protection!
-    Class::MOP::load_class($page->class);
-    my @attrs = $page->class->meta->get_all_attributes;
-    $c->stash->{meta} = $page->class->meta;
-    $c->stash->{instance} = $page->class->new($url->options);
-    foreach my $attr (@attrs) {
-        push(@{ $required }, $attr->name);
-    }
+    eval {
+        Class::MOP::load_class($page->class);
+        my @attrs = $page->class->meta->get_all_attributes;
+        $c->stash->{meta} = $page->class->meta;
+        foreach my $attr (@attrs) {
+            push(@{ $required }, 'options.'.$attr->name);
+        }
+        $c->stash->{instance} = $page->class->new($url->options);
+        $c->form(required => $required);
+    };
 
-    $c->form(required => $required);
-
-    unless($c->form_is_valid) {
-        $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors.');
+    if((defined($@) && ($@ ne '')) || !$c->form_is_valid) {
+        my $error = $@;
+        if(defined($error)) {
+            $c->stash->{message}->{error} = $c->localize('Error: "[_1]"', $error);
+        } else {
+            $c->stash->{message}->{error} = $c->localize('Please correct the highlighted errors.');
+        }
         $c->detach('add');
     }
 
     my $rev = $url->make_new;
 
     unless(defined($rev)) {
-        $c->stash->{message}->{fail} = $c->localize('Failed to create URL and Revision.');
+        $c->stash->{message}->{error} = $c->localize('Failed to create URL and Revision.');
         $c->detach('add');
     }
 
@@ -128,7 +134,7 @@ sub save : Chained('item_base') PathPart('save') Args(0) {
     #XXX Validation
     $c->form(required => [qw(description)]);
     unless($c->form_is_valid) {
-        $c->stash->{message}->{fail} = $c->localize('Please correct the highlighted errors');
+        $c->stash->{message}->{error} = $c->localize('Please correct the highlighted errors');
         $c->detach('add');
     }
 
