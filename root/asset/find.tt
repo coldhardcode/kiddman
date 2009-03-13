@@ -1,0 +1,24 @@
+<h1>[% c.loc('Asset') %]</h1>
+[% IF image %]
+ <img src="[% c.config.Beckley.url %]/fetch/uuid/[% asset.id %]/image?p=transform&a=scale&v=w50">
+[% END %]
+<form>
+ <fieldset>
+  [% readonly_field(label => 'Id', value => asset.id ) %]
+  [% readonly_field(label => 'Key', value => asset.key) %]
+  [% readonly_field(label => 'Source', value => asset.source) %]
+  [% readonly_field(label => 'Mime-Type', value => asset.mime_type) %]
+  [% readonly_field(label => 'Active', value => asset.active) %]
+  [% readonly_field(label => 'Date Created', value => asset.date_created) %]
+  [% FOREACH version = asset.versions %]
+  <dl>
+   [% IF version.id == asset.id %]
+   <dt>[% version.id %]</dt>
+   [% ELSE %]
+   <dt><a href="[% c.action_uri('Asset', 'find', { 'uuid' => version.id }) %]">[% version.id %]</a></dt>
+   [% END %]
+   <dd>[% version.date_created %]</dd>
+  </dl>
+  [% END %]
+ </fieldset>
+</form>

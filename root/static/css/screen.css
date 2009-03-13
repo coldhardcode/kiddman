@@ -176,6 +176,17 @@ fieldset textarea {
     float: left;
     margin: 0 0 1em 0;
 }
+fieldset dl {
+    clear: both;
+    padding: 0 0 0 15em;
+}
+fieldset dl dt {
+    clear: both;
+    float: left;
+}
+fieldset dl dd {
+    float: left;
+}
 fieldset.cwrap {
     background-color: #fff;
     float: left;
@@ -224,6 +235,12 @@ p.subdued {
     color: #f3f3f3;
     padding: 5px;
     margin: 0 0 1em 0;
+}
+#navigation a {
+    color: #fff;
+    display: block;
+    margin: 0 0 .5em 0;
+    text-decoration: underline;
 }
 #gmessage {
     background: #339900 url('/static/images/g-round-box-right.png') no-repeat right top;

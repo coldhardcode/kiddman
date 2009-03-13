@@ -1,0 +1,20 @@
+<h1>[% c.loc('Asset Management') %]</h1>
+<form method="POST" action="[% c.action_uri('Asset', 'find') %]">
+ <fieldset>
+  [% input_text({ label => 'Key', name => 'key' }) %]
+  <div class="submit">
+   <input type="submit" value="[% c.loc('Submit') %]">
+  </div>
+ </fieldset>
+</form>
+<h2>Upload</h2>
+<form method="POST" enctype="multipart/form-data" action="[% c.config.Beckley.url %]/store/upload">
+ <input type="hidden" name="sendto" value="[% c.action_uri('Asset', 'find') %]">
+ <fieldset>
+  [% input_text({ label => 'Key', name => 'key' }) %]
+  <label><em>[% c.loc('File') %]</em><input type="file" name="asset"></label>
+  <div class="submit">
+   <input type="submit" value="[% c.loc('Submit') %]">
+  </div>
+ </fieldset>
+</form>

@@ -6,6 +6,9 @@
 [% END %]
 <div id="navigation">
  <h3>[% c.loc('Navigation') %]</h3>
+ [% IF c.config.Beckley.enabled %]
+ <a href="[% c.action_uri('Asset', 'main') %]">[% c.loc('Asset Manager') %]</a>
+ [% END %]
  <form>
   [% UNLESS context.site %]
    [% SET empty = 1 %]

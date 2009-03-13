@@ -11,6 +11,9 @@ Model::RW:
             quote_char: '`'
             name_sep: .
             mysql_enable_utf8: 1
+Beckley:
+    enabled: 1
+    url: http://127.0.0.1:3000
 Plugin::Authentication:
     default_realm: members
     realms:
