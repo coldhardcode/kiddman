@@ -13,7 +13,7 @@ Model::RW:
             mysql_enable_utf8: 1
 Beckley:
     enabled: 1
-    url: http://127.0.0.1:3000
+    url: http://127.0.0.1:3003
 Plugin::Authentication:
     default_realm: members
     realms:
@@ -36,8 +36,11 @@ Plugin::Authentication:
 TypeMap:
     Str: types/str.tt
     Kiddman::Client::Types::LongStr: types/longstr.tt
-    "Greenspan::Hadleigh::Page::SingleSet::SetId": types/array.tt
-    "Greenspan::Hadleigh::Page::SingleSet::Layout": types/array.tt
+    "Greenspan::Hadleigh::Page::Types::SetId": types/array.tt
+    "Greenspan::Hadleigh::Page::Types::Layout": types/array.tt
+    "Greenspan::View::Types::CategoryList" : types/multi_array.tt
 TypeProvider:
-    "Greenspan::Hadleigh::Page::SingleSet::SetId": Greenspan::Hadleigh::Page::SetProvider
-    "Greenspan::Hadleigh::Page::SingleSet::Layout": Greenspan::Hadleigh::Page::LayoutProvider
+    "Greenspan::Hadleigh::Page::Types::SetId": Greenspan::Hadleigh::Page::SetProvider
+    "Greenspan::Hadleigh::Page::Types::Layout": Greenspan::Hadleigh::Page::LayoutProvider
+    "Greenspan::View::Types::CategoryList": Greenspan::Hadleigh::Page::CategoryProvider
+

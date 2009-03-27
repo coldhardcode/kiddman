@@ -35,10 +35,10 @@ sub find : Chained('root') PathPart('find') Args(0) {
     my $url;
     if(defined($c->req->params->{key})) {
         my $key = $c->req->params->{key};
-        $url = "http://127.0.0.1:3000/fetch/key/$key/info";
+        $url = $c->config->{Beckley}->{url}."/fetch/key/$key/info";
     } elsif(defined($c->req->params->{uuid})) {
         my $uuid = $c->req->params->{uuid};
-        $url = "http://127.0.0.1:3000/fetch/uuid/$uuid/info";
+        $url = $c->config->{Beckley}->{url}."/fetch/uuid/$uuid/info";
     } else {
         $c->stash->{message}->{error} = $c->loc('Must specify a key or UUID!');
         $c->detach('main');
