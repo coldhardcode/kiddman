@@ -56,16 +56,22 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
     }
 
     # XXX Eval protection!
-    eval {
+    # eval {
         Class::MOP::load_class($page->class);
         my @attrs = $page->class->meta->get_all_attributes;
         $c->stash->{meta} = $page->class->meta;
+
+        my $class = Class::MOP::Class->create($page->class."::Proxy");
         foreach my $attr (@attrs) {
-            push(@{ $required }, 'options.'.$attr->name);
+            if($attr->is_required) {
+                push(@{ $required }, 'options.'.$attr->name);
+            }
+            $class->add_attribute($attr->name => ( is => 'rw', reader => $attr->name, writer => $attr->name ));
         }
-        $c->stash->{instance} = $page->class->new($url->options);
+        # $c->stash->{instance} = $page->class->new($url->options);
+        $c->stash->{instance} = $class->new_object($url->options);
         $c->form(required => $required);
-    };
+    # };
 
     if((defined($@) && ($@ ne '')) || !$c->form_is_valid) {
         my $error = $@;
