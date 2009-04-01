@@ -5,6 +5,14 @@
  [% ELSE %]
  [% opt_id = val %]
  [% END %]
- <option value="[% opt_id %]" [% IF opt_id == opts.value %]selected="selected"[% END %]>[% val %]</option>
+
+ [% IF opts.name_accessor %]
+ [% opt_name = val.${opts.name_accessor} %]
+ [% ELSE %]
+ [% opt_name = val %]
+ [% END %]
+
+
+ <option value="[% opt_id %]" [% IF opt_id == opts.value %]selected="selected"[% END %]>[% opt_name %]</option>
  [% END %]
 </select>

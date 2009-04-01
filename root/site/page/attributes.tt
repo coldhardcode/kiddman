@@ -1,7 +1,7 @@
 <h2>Page Attributes</h2>
 [% SET attributes = meta.get_all_attributes %]
 [% FOREACH attr = attributes %]
-
+[% attr %]
 [% IF attr.has_label %]
   [% SET type = attr.type_constraint.name %]
   <label class="[% form_field_status('options.' _ attr.name) %]"><em>[% attr.label %][% IF attr.is_required %]<span class="req">*</span>[% END %]: </em><span>
@@ -10,6 +10,7 @@
      [% provider = c.get_provider(type) %]
      [% IF provider %]
       [% argref.values = provider.get_values %]
+      [% argref.name_accessor = provider.name_accessor %]
       [% argref.val_accessor = provider.value_accessor %]
       [% provider.override_type %]
      [% END %]
