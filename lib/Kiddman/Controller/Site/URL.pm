@@ -56,7 +56,7 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
     }
 
     # XXX Eval protection!
-    # eval {
+    eval {
         Class::MOP::load_class($page->class);
         my @attrs = $page->class->meta->get_all_attributes;
         $c->stash->{meta} = $page->class->meta;
@@ -66,19 +66,18 @@ sub create : Chained('site_base') PathPart('create') Args(0) {
             if($attr->is_required) {
                 push(@{ $required }, 'options.'.$attr->name);
             }
-            $class->add_attribute($attr->name => ( is => 'rw', reader => $attr->name, writer => $attr->name ));
+            $class->add_attribute($attr->name => ( is => 'rw', accessor => $attr->name ));
         }
-        # $c->stash->{instance} = $page->class->new($url->options);
         $c->stash->{instance} = $class->new_object($url->options);
         $c->form(required => $required);
-    # };
+    };
 
     if((defined($@) && ($@ ne '')) || !$c->form_is_valid) {
         my $error = $@;
-        if(defined($error)) {
-            $c->stash->{message}->{error} = $c->localize('Error: "[_1]"', $error);
-        } else {
+        if(!$c->form_is_valid) {
             $c->stash->{message}->{error} = $c->localize('Please correct the highlighted errors.');
+        } else {
+            $c->stash->{message}->{error} = $c->localize('Error: "[_1]"', $error);
         }
         $c->detach('add');
     }
